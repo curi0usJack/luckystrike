@@ -22,6 +22,7 @@ $requiredmodules = @('PSSQlite')
 $installfolder = "$($PWD.Path)\luckystrike"
 $dbpath = "$installfolder\ls.db"
 
+Write-Output "### LUCKYSTRIKE INSTALLATION ROUTINE ###"
 Write-Output "[*] Installing\Importing Dependencies.."
 # Install dependencies (if necessary)
 foreach ($moduleName in $requiredmodules)

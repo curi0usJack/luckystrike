@@ -1,4 +1,4 @@
-#Requires -Version 5 
+#Requires -Version 5 -RunAsAdministrator
 <#
 .SYNOPSIS
     The installation script that prepares the luckystrike database & copies down luckystrike from git.

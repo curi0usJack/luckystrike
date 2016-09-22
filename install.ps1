@@ -570,6 +570,7 @@ else
     Write-Output "[*] Detected database at $dbpath."
 }
 
-# TODO: Copy down luckystrike script from git.
+Write-Output "[*] Downloading luckystrike.ps1 into $installfolder"
+(New-Object System.Net.Webclient).DownloadFile('https://raw.githubusercontent.com/Shellntel/luckystrike/master/luckystrike.ps1', "$installfolder\luckystrike.ps1")
 
 Write-Output "[*] Done!"

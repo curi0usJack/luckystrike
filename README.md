@@ -10,4 +10,4 @@ A PowerShell based utility for the creation of malicious Office macro documents.
 5. From an ADMINISTRATIVE PowerShell prompt, run the following command. A luckystrike folder will be created for you.
   1. `iex (new-object net.webclient).downloadstring('https://raw.githubusercontent.com/Shellntel/luckystrike/master/install.ps1')`
 6. Run .\luckystrike\luckystrike.ps1 (lowpriv or admin. Doesn't matter).
-7. Repeat step #1 when you have a question. :-)
+7. Repeat step #1 when you have a question, or submit a github issue. :-)

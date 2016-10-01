@@ -1,3 +1,4 @@
+Start-Sleep -m 1000
 $currentdb = "$($PWD.Path)\ls.db"
 $bakdb = "$($PWD.Path)\ls.db.bak"
 $tmpdb = "$($PWD.Path)\ls.tmp.db"

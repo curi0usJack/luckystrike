@@ -1,4 +1,3 @@
-Start-Sleep -m 1000
 $currentdb = "$($PWD.Path)\ls.db"
 $bakdb = "$($PWD.Path)\ls.db.bak"
 $tmpdb = "$($PWD.Path)\ls.tmp.db"
@@ -95,3 +94,4 @@ catch [System.Exception]
 }
 
 Write-Output "[*] Done!"
+Read-Host "Press any key to close this window. Assuming no errors, run luckystrike.ps1 from your main window. Happy hacking! --@curi0usJack"

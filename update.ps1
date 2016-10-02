@@ -94,4 +94,4 @@ catch [System.Exception]
 }
 
 Write-Output "[*] Done!"
-Read-Host "`nPress any key to continue. If errors, grab a screenshot and submit an issue on github, otherwise run the new version of luckystrike.ps1. Happy hacking! --@curi0usJack
+Read-Host "`nPress any key to continue. If errors, grab a screenshot and submit an issue on github, otherwise run the new version of luckystrike.ps1. Happy hacking! --@curi0usJack"

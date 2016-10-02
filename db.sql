@@ -124,7 +124,6 @@ CREATE TABLE `InfectionType_Dependencies` (
 INSERT INTO PayloadTypes (Name, Description) VALUES ('Shell Command', 'Standard shell command. Uses Wscript.Shell to fire the command exactly as is. Be sure your escapes are correct. <evilgrin>');
 INSERT INTO PayloadTypes (Name, Description) VALUES ('PowerShell Script', 'A standard, non-base64 encoded powershell script to run');
 INSERT INTO PayloadTypes (Name, Description) VALUES ('Executable', 'Embeds an EXE into cells & fires');    
-INSERT INTO PayloadTypes (Name, Description) VALUES ('Derp', 'Embeds an EXE into cells & fires');   --3
 INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('Shell Command', 'Uses Wscript.Shell to fire the command exactly as is in a hidden window. Be sure your escapes are correct.', 'xls');                                                                              --1
 INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('Cell Embed', 'Your `"go to`" for firing PowerShell scripts. Base64 encodes .ps1 payload then embeds into cells. Macro concatenates then fires directly with powershell. Payload does not touch disk.', 'xls');                        --2
 INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('Cell Embed-nonB64', 'Embeds .ps1 into cells (no b64). Does NOT save payload to disk. Fires directly with powershell.exe. Recommended.', 'xls');                                                                    --3

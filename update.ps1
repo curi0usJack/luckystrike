@@ -1,7 +1,7 @@
 $currentdb = "$($PWD.Path)\ls.db"
 $bakdb = "$($PWD.Path)\ls.db.bak"
-$tmpdb = "$($PWD.Path)\ls.db.tmp"
-$newdb = "$($PWD.Path)\ls.db.new"
+$tmpdb = "$($PWD.Path)\ls-tmp.db"
+$newdb = "$($PWD.Path)\ls-new.db"
 
 
 # Give luckystrike a sec to close & release handles.
@@ -54,7 +54,7 @@ try
         Invoke-SqliteQuery -SQLiteConnection $dbConnNew -Query $query -SqlParameters $params
     }
 }
-catch [System.Exception]
+catch
 {
     $dbConnCurrent.Close()
     $dbConnCurrent.Dispose()

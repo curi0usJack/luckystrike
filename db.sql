@@ -1,3 +1,5 @@
+PRAGMA journal_mode = OFF;
+
 CREATE TABLE `PayloadTypes` (
 	`ID`	        INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	`Name`	        TEXT NOT NULL,

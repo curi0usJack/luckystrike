@@ -47,8 +47,8 @@ try
 
     foreach ($p in $payloads)
     {
-        $params = @{'name' = $p.Name; 'desc' = $p.Description; 'tip' = $p.TargetIP; 'tport' = $p.TargetPort; 'type' = $p.PayloadType; 'text' = $p.PayloadText }
-        $query = "INSERT INTO PAYLOADS (NAME, DESCRIPTION, TARGETIP, TARGETPORT, PAYLOADTYPE, PAYLOADTEXT) VALUES (@name, @desc, @tip, @tport, @type, @text)"
+        $params = @{'name' = $p.Name; 'desc' = $p.Description; 'tip' = $p.TargetIP; 'tport' = $p.TargetPort; 'numblocks' = $p.NumBlocks; 'type' = $p.PayloadType; 'text' = $p.PayloadText }
+        $query = "INSERT INTO PAYLOADS (NAME, DESCRIPTION, TARGETIP, TARGETPORT, PAYLOADTYPE, NUMBLOCKS, PAYLOADTEXT) VALUES (@name, @desc, @tip, @tport, @type, @numblocks, @text)"
         Invoke-SqliteQuery -SQLiteConnection $dbConnNew -Query $query -SqlParameters $params
     }
 }

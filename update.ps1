@@ -1,8 +1,6 @@
 $currentdb = "$($PWD.Path)\ls.db"
 $bakdb = "$($PWD.Path)\ls.db.bak"
-$tmpdb = "$($PWD.Path)\ls-tmp.db"
-$newdb = "$($PWD.Path)\ls-new.db"
-
+$tmpdb = "$($PWD.Path)\ls.tmp.db"
 
 # Give luckystrike a sec to close & release handles.
 Write-Output "[*] Sleeping 3 seconds"
@@ -32,7 +30,7 @@ Write-Output "[*] Migrating database"
 
 # tmp == current. current == new. Don't ask.
 $dbConnCurrent = New-SQLiteConnection -DataSource $tmpdb
-$dbConnNew = New-SQLiteConnection -DataSource $newdb
+$dbConnNew = New-SQLiteConnection -DataSource $currentdb
 try 
 {
     Invoke-SqliteQuery -SQLiteConnection $dbConnNew -Query $db

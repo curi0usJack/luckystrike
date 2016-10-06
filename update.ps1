@@ -2,6 +2,10 @@ $currentdb = "$($PWD.Path)\ls.db"
 $bakdb = "$($PWD.Path)\ls.db.bak"
 $tmpdb = "$($PWD.Path)\ls.tmp.db"
 
+# Give luckystrike a sec to close & release handles.
+Write-Output "[*] Sleeping 3 seconds"
+Start-Sleep -Seconds 3
+
 Write-Output "[*] Backing up database"
 if (Test-Path -Path $currentdb)
 {

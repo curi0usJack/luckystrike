@@ -91,13 +91,13 @@ try
 catch [System.Exception] {
     Write-Output "Error saving new version of luckystrike.ps1"
     throw
+	Read-Host "Press any key to exit."
     exit
 }
 
 try 
 {
     Write-Output "[*] Cleaning up"
-    Move-Item $newdb $currentdb
     Remove-Item $tmpdb
     Remove-Item $bakdb
 }
@@ -105,6 +105,7 @@ catch [System.Exception]
 {
     Write-Output "[!] Unable to remove current db file: $currentdb. Remove this file manually and copy ls.db.new to ls.db, then you're good to go."
     throw
+	Read-Host "Press any key to exit."
 }
 
 Write-Output "[*] Done!"

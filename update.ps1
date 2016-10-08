@@ -33,7 +33,7 @@ $dbConnCurrent = New-SQLiteConnection -DataSource $tmpdb
 $dbConnNew = New-SQLiteConnection -DataSource $currentdb
 try 
 {
-    Invoke-SqliteQuery -SQLiteConnection $dbConnNew -Query $db
+    Invoke-SqliteQuery -SQLiteConnection $dbConnNew -Query $db | Out-Null
 
     $payloads = Invoke-SqliteQuery -SQLiteConnection $dbConnCurrent -Query "SELECT * FROM PAYLOADS"
     $templates = Invoke-SqliteQuery -SQLiteConnection $dbConnCurrent -Query "SELECT * FROM TEMPLATES"
@@ -42,14 +42,14 @@ try
     {
         $params = @{'name' = $template.Name; 'doctype' = $template.DocType; 'text' = $template.TemplateText}
         $query = "INSERT INTO TEMPLATES (NAME, DOCTYPE, TEMPLATETEXT) VALUES (@name, @doctype, @text)"
-        Invoke-SqliteQuery -SQLiteConnection $dbConnNew -Query $query -SqlParameters $params
+        Invoke-SqliteQuery -SQLiteConnection $dbConnNew -Query $query -SqlParameters $params | Out-Null
     }
 
     foreach ($p in $payloads)
     {
         $params = @{'name' = $p.Name; 'desc' = $p.Description; 'tip' = $p.TargetIP; 'tport' = $p.TargetPort; 'numblocks' = $p.NumBlocks; 'type' = $p.PayloadType; 'text' = $p.PayloadText }
         $query = "INSERT INTO PAYLOADS (NAME, DESCRIPTION, TARGETIP, TARGETPORT, PAYLOADTYPE, NUMBLOCKS, PAYLOADTEXT) VALUES (@name, @desc, @tip, @tport, @type, @numblocks, @text)"
-        Invoke-SqliteQuery -SQLiteConnection $dbConnNew -Query $query -SqlParameters $params
+        Invoke-SqliteQuery -SQLiteConnection $dbConnNew -Query $query -SqlParameters $params | Out-Null
     }
 }
 catch

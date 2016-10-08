@@ -67,7 +67,7 @@ if (!(Test-Path -Path $dbpath))
     try 
     {
         
-        Invoke-SqliteQuery -SQLiteConnection $dbConnection -Query $init
+        Invoke-SqliteQuery -SQLiteConnection $dbConnection -Query $init | Out-Null
     }
     catch [System.Exception] 
     {

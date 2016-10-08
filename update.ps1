@@ -63,6 +63,7 @@ catch
     Remove-Item $tmpdb -Force -ErrorAction Continue
     Remove-Item $currentdb -Force -ErrorAction Continue
     Rename-Item $bakdb $currentdb
+	Read-Host "Please take a screenshot of this log an issue on github. Press any key to exit."
     exit
 }
 finally

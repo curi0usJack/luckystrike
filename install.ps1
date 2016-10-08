@@ -63,7 +63,7 @@ if (!(Test-Path -Path $dbpath))
     $init = (New-Object System.Net.WebClient).Downloadstring('https://raw.githubusercontent.com/Shellntel/luckystrike/dev/db.sql')
 
     Write-Output "[*] Creating & initializing database: $dbpath"
-    $dbConnection = New-SQLiteConnection -DataSource $dbpath
+    $dbConnection = New-SQLiteConnection -DataSource $dbpath | Out-Null
     try 
     {
         

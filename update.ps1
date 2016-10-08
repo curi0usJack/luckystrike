@@ -54,24 +54,32 @@ try
 }
 catch
 {
-    $dbConnCurrent.Close()
-    $dbConnCurrent.Dispose()
-    $dbConnNew.Close()
-    $dbConnNew.Dispose()
+    if ($dbConnCurrent -ne $null)
+    {
+		$dbConnCurrent.Dispose()
+	}
+	if ($dbConnNew -ne $null)
+    {
+		$dbConnNew.Dispose()
+	}
     Write-Output "[!] Error occurred. Restoring database."
     throw
     Remove-Item $tmpdb -Force -ErrorAction Continue
     Remove-Item $currentdb -Force -ErrorAction Continue
     Rename-Item $bakdb $currentdb
-	Read-Host "Please take a screenshot of this log an issue on github. Press any key to exit."
+	Read-Host "Please take a screenshot of this and log an issue on github. Press any key to exit."
     exit
 }
 finally
 {
-    $dbConnCurrent.Close()
-    $dbConnCurrent.Dispose()
-    $dbConnNew.Close()
-    $dbConnNew.Dispose()
+	if ($dbConnCurrent -ne $null)
+    {
+		$dbConnCurrent.Dispose()
+	}
+	if ($dbConnNew -ne $null)
+    {
+		$dbConnNew.Dispose()
+	}
 }
 
 try 

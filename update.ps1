@@ -8,8 +8,8 @@ Start-Sleep -Seconds 3
 
 # Run garbage collection to clean up sqlite file handles
 Write-Output "[*] Collecting sqlite garbage..."
-GC.Collect()
-GC.WaitForPendingFinalizers()
+[System.GC]::Collect()
+[System.GC]::WaitForPendingFinalizers()
 
 Write-Output "[*] Backing up database"
 if (Test-Path -Path $currentdb)

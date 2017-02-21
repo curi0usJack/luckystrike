@@ -60,7 +60,7 @@ if (!(Test-Path -Path $installfolder))
 if (!(Test-Path -Path $dbpath))
 {
     Write-Output "[*] Downloading db.sql"
-    $init = (New-Object System.Net.WebClient).Downloadstring('https://raw.githubusercontent.com/Shellntel/luckystrike/dev/db.sql')
+    $init = (New-Object System.Net.WebClient).Downloadstring('https://raw.githubusercontent.com/Shellntel/luckystrike/master/db.sql')
 
     Write-Output "[*] Creating & initializing database: $dbpath"
     $dbConnection = New-SQLiteConnection -DataSource $dbpath 

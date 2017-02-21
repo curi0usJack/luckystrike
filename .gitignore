@@ -29,6 +29,10 @@
 ls.db.*
 
 payloads/
+<<<<<<< HEAD
+=======
+test/
+>>>>>>> dev
 
 # OS generated files #
 ######################

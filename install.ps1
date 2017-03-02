@@ -85,6 +85,6 @@ else
 }
 
 Write-Output "[*] Downloading luckystrike.ps1 into $installfolder"
-(New-Object System.Net.Webclient).DownloadFile('https://raw.githubusercontent.com/Shellntel/luckystrike/dev/luckystrike.ps1', "$installfolder\luckystrike.ps1")
+(New-Object System.Net.Webclient).DownloadFile('https://raw.githubusercontent.com/Shellntel/luckystrike/master/luckystrike.ps1', "$installfolder\luckystrike.ps1")
 
 Write-Output "[*] Done!"

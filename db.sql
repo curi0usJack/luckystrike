@@ -462,7 +462,6 @@ Sub |RANDOMNAME|()
     Dim x,k,p As String
     x = GetVal(|STARTROW|, |ENDROW|, |COLUMN|)
     k = em()
-    p = crc(fhd(CStr(x)), CStr(k))
     p = cript(GetBusiness(CStr(x)), CStr(k))
     p = Replace(p, """", "\""")
     Dim c As String

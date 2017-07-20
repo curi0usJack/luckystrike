@@ -2499,7 +2499,7 @@ Write-Message "Debug logging enabled" "debug"
 
 if (!([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
 {
-	Write-Message "Luckystrike modifies HKLM registry keys and must be run in administrator mode. Please relaunch from an administrative PowerShell window." "error"
+	Write-Message "Luckystrike will modify HKLM registry keys if necesary and must be run in administrator mode. Please relaunch from an administrative PowerShell window." "error"
 	exit	
 }
 

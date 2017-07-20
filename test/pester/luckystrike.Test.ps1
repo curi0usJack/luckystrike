@@ -51,7 +51,7 @@ Describe "Payloads" -Tag "Payloads" {
     }
 
     It "Adds a new exe com scriptlet payload" {
-        Create-DBPayload "COM-Calc" "1.1.1.1" "443" "Pester" 4 $null $null "http://74.202.242.20/calc.txt"
+        Create-DBPayload "COM-Calc" "1.1.1.1" "443" "Pester" 4 $null $null "http://127.0.0.1/calc.txt"
     }
 }
 

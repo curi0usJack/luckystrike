@@ -31,7 +31,7 @@ Describe "Payloads" -Tag "Payloads" {
     }
 
     It "Adds a new calc.exe powershell command payload" {
-        Create-DBPayload "PS-Calc" "1.1.1.1" "443" "Pester" 2 $null "$ls\test\payloads\runcalc.ps1"
+        Create-DBPayload "PS-Calc" "1.1.1.1" "443" "Pester" 2 $null "$ls\test\testpayloads\runcalc.ps1"
     }
 
     It "Adds a new calc.exe exe command payload" {
@@ -39,15 +39,15 @@ Describe "Payloads" -Tag "Payloads" {
     }
 
     It "Adds a new evil.exe irpei exe command payload" {
-        Create-DBPayload "EXE-Evil" "1.1.1.1" "443" "Pester" 3 $null "$ls\test\payloads\evil.exe"
+        Create-DBPayload "EXE-Evil" "1.1.1.1" "443" "Pester" 3 $null "$ls\test\testpayloads\evil.exe"
     }
 
     It "Adds a new PS empire launcher command payload" {
-        Create-DBPayload "PS-Empire" "1.1.1.1" "443" "Pester" 2 $null "$ls\test\payloads\launcher.ps1"
+        Create-DBPayload "PS-Empire" "1.1.1.1" "443" "Pester" 2 $null "$ls\test\testpayloads\launcher.ps1"
     }
 
     It "Adds a new exe putty.exe payload" {
-        Create-DBPayload "EXE-Putty" "1.1.1.1" "443" "Pester" 3 $null "$ls\test\payloads\putty.exe"
+        Create-DBPayload "EXE-Putty" "1.1.1.1" "443" "Pester" 3 $null "$ls\test\testpayloads\putty.exe"
     }
 
     It "Adds a new exe com scriptlet payload" {
@@ -58,11 +58,11 @@ Describe "Payloads" -Tag "Payloads" {
 Describe "Templates" -Tag "Templates" {
 
     It "Adds a new xls calendar template" {
-        Create-DBTemplate "Pester-Calendar" "$ls\test\payloads\template-calendar.xls" "xls"
+        Create-DBTemplate "Pester-Calendar" "$ls\test\testpayloads\template-calendar.xls" "xls"
     }
 
     It "Adds a new doc calendar template" {
-        Create-DBTemplate "Pester-Word" "$ls\test\payloads\template.doc" "doc"
+        Create-DBTemplate "Pester-Word" "$ls\test\testpayloads\template.doc" "doc"
     }
 }
 

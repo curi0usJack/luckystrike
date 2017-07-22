@@ -422,7 +422,6 @@ Public Function cript(sText As String, sKey As String) As String
         bytSwap = baS(lI)
         baS(lI) = baS(lJ)
         baS(lJ) = bytSwap
-        crc = crc & Chr$((pvC(baS((CLng(baS(lI)) + baS(lJ)) Mod 256), Asc(Mid$(sText, lIdx, 1)))))
         cript = cript & Chr$((phc(baS((CLng(baS(lI)) + baS(lJ)) Mod 256), Asc(Mid$(sText, lIdx, 1)))))
     Next
 End Function

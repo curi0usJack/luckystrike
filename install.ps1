@@ -60,7 +60,7 @@ if (!(Test-Path -Path $installfolder))
 if (!(Test-Path -Path $dbpath))
 {
     Write-Output "[*] Downloading db.sql"
-    $init = (New-Object System.Net.WebClient).Downloadstring('https://raw.githubusercontent.com/Shellntel/luckystrike/master/db.sql')
+    $init = (New-Object System.Net.WebClient).Downloadstring('https://raw.githubusercontent.com/curi0usJack/luckystrike/master/db.sql')
 
     Write-Output "[*] Creating & initializing database: $dbpath"
     $dbConnection = New-SQLiteConnection -DataSource $dbpath 
@@ -85,6 +85,6 @@ else
 }
 
 Write-Output "[*] Downloading luckystrike.ps1 into $installfolder"
-(New-Object System.Net.Webclient).DownloadFile('https://raw.githubusercontent.com/Shellntel/luckystrike/master/luckystrike.ps1', "$installfolder\luckystrike.ps1")
+(New-Object System.Net.Webclient).DownloadFile('https://raw.githubusercontent.com/curi0usJack/luckystrike/master/luckystrike.ps1', "$installfolder\luckystrike.ps1")
 
 Write-Output "[*] Done!"

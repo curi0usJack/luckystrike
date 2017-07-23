@@ -19,8 +19,9 @@ if (Test-Path -Path $currentdb)
 }
 
 Write-Output "[*] Downloading files"
-$db = (New-Object System.Net.WebClient).Downloadstring('https://raw.githubusercontent.com/Shellntel/curi0usJack/master/db.sql')
-$ls = (New-Object System.Net.WebClient).Downloadstring('https://raw.githubusercontent.com/Shellntel/curi0usJack/master/luckystrike.ps1')
+
+$db = (New-Object System.Net.WebClient).Downloadstring('https://raw.githubusercontent.com/curi0usJack/luckystrike/dev/db.sql')
+$ls = (New-Object System.Net.WebClient).Downloadstring('https://raw.githubusercontent.com/curi0usJack/luckystrike/dev/luckystrike.ps1')
 
 if ($db -eq $null -or $ls -eq $null)
 {
@@ -114,5 +115,5 @@ catch [System.Exception]
 }
 
 Write-Output "[*] Done!"
-Write-Output "`nUpdates in 1.1.7 - Truckload of bug fixes & more AV sidestepping. New features including .doc support and obfuscation techniques coming in next release!"
-Read-Host "`nPress any key to continue. If errors, grab a screenshot and submit an issue on github, otherwise run the new version of luckystrike.ps1. Happy hacking! --@curi0usJack"
+Write-Output "`nUpdates in 2.0 - Word support, Invoke-Obfuscation support, new attack methods. See blog post here for new features https://curi0usjack.blogspot.com/2017/07/luckystrike-20-is-here.html"
+Read-Host "`nPress any key to continue. If errors, grab a screenshot and submit an issue with the debug log on github, otherwise run the new version of luckystrike.ps1. Happy hacking! --@curi0usJack"

@@ -3,7 +3,6 @@
 *.com
 *.class
 *.dll
-*.exe
 *.o
 *.so
 
@@ -29,10 +28,8 @@
 ls.db.*
 
 payloads/
-<<<<<<< HEAD
-=======
-test/
->>>>>>> dev
+test/scripts/
+
 
 # OS generated files #
 ######################

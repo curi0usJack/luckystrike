@@ -54,7 +54,7 @@
 	Does not load menus. Allows for dot-sourcing of luckystrike and calling functions.
 
 .NOTES
-	CURRENTVERSION:			1.1.7
+	CURRENTVERSION:			2.0
 
 	Version History:		
 							07/22/2017	2.0.0	Word & Invoke-Obfuscation support. Bug fixes.
@@ -82,7 +82,7 @@ Param
 	[switch] $SQL
 )
 
-$version = "1.1.7"
+$version = "2.0"
 $requiredmodules = @('PSSQlite', 'Invoke-Obfuscation')
 $dbpath = "$($PWD.Path)\ls.db"
 $macroelements = $null
@@ -166,10 +166,6 @@ function Write-Message {
 		# I know, I know. This code is truly horrible. Judge not, lest I find your github repos...
 		if ($PSCmdlet.MyInvocation.BoundParameters -ne $null -and $PSCmdlet.MyInvocation.BoundParameters['Debug'].IsPresent)
 		{
-			if ($symbol -ne $null)
-			{
-				#$message = "[$symbol] - $message"
-			}
 			Add-Content $debuglog $message
 			Write-Text $symbol $color $message
 		}
@@ -276,7 +272,6 @@ function Get-AllPayloads()
 		FROM Payloads p, PayloadTypes pt 
 		WHERE p.PayloadType = pt.ID"
 }
-
 function Get-PayloadByID($id)
 {
 	$params = @{"id" = $id}
@@ -432,7 +427,6 @@ function Add-ActiveWorking($payloadid, $infectionid, $numblocks, $encryptedpaylo
 	$params = @{"pid" = [int]$payloadid; "itid" = [int]$infectionid; "legend" = $legend; "isencrypted" = $isencrypted; "encpayload" = $encryptedpayload; "strings" = $customstrings}
 	return Invoke-DBQuery "INSERT INTO ActiveWorking (PayloadID, InfectionType, LegendString, IsEncrypted, EncryptedText, CustomStrings) VALUES (@pid, @itid, @legend, @isencrypted, @encpayload, @strings)" $params
 }
-
 function Remove-ActiveWorking ($payloadid)
 {
 	$params = @{"pid" = [int]$payloadid}
@@ -657,7 +651,6 @@ function Create-DBPayload($title=$null, $destIP=$null, $destPort=$null, $descrip
 	Write-Message "Payload added." "success" $true
 	Load-Menu $script:currentmenu
 }
-
 function Remove-DBPayload()
 {
 	$allpayloads = Get-AllPayloads
@@ -700,7 +693,6 @@ function Remove-DBPayload()
 		Load-Menu $script:currentmenu
 	}
 }
-
 function Show-PayloadDetails()
 {
 	$all = Get-AllPayloads
@@ -767,7 +759,6 @@ function Create-DBTemplate($title=$null, $path=$null, $doctype=$null)
 	
 	Load-Menu $script:currentmenu
 }
-
 function Remove-DBTemplate()
 {
 	$templates = Get-AllTemplates
@@ -809,7 +800,6 @@ function Remove-DBTemplate()
 	}
 
 }
-
 function Show-TemplateDetails()
 {
 	$templates = Get-AllTemplates
@@ -886,7 +876,6 @@ function Get-PayloadPartsArray($targetstring, $convertToB64, $maxlength)
 
 	return $fileparts
 }
-
 function Parse-Legend($legendstring)
 {
 	$s = $legendstring.Split(',')

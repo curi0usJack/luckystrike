@@ -56,7 +56,9 @@
 .NOTES
 	CURRENTVERSION:			1.1.7
 
-	Version History:		02/21/2017	1.1.7	Fixed major bug introduced by 1.1.6. AV evasions.
+	Version History:		
+							07/22/2017	2.0.0	Word & Invoke-Obfuscation support. Bug fixes.
+							02/21/2017	1.1.7	Fixed major bug introduced by 1.1.6. AV evasions.
 							10/04/2016	1.1.6	Added auto-update functionality
 							09/29/2016	1.1.5	Accounted for additional registry key modification.
 							09/29/2016	1.1.4	Debug info added.

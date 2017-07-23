@@ -14,7 +14,7 @@ A PowerShell based utility for the creation of malicious Office macro documents.
 
 ## If you have a problem
 
-1. Run luckystrike with the -Debug flag. This will generate a debug .log file in the luckystrike directory.
+1. Run luckystrike with the -Debug switch. This will generate a debug .log file in the luckystrike directory.
 1. Reproduce the issue
 1. Take a screenshot of the error
 1. Submit a github issue with the screenshot & debug log attached.

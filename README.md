@@ -1,5 +1,5 @@
 # luckystrike
-A PowerShell based utility for the creation of malicious Office macro documents.
+A PowerShell based utility for the creation of malicious Office macro documents. To be used for pentesting or educational purposes only.
 
 ## Getting Started
 
